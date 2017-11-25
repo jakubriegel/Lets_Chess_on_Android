@@ -9,4 +9,13 @@
         <attr name="metaButtonBarButtonStyle" format="reference" />
     </declare-styleable>
 
+    <declare-styleable name="Board">
+
+    </declare-styleable>
+
+    <declare-styleable name="GameCanvas">
+
+    </declare-styleable>
+
+
 </resources>
