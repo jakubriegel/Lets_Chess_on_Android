@@ -17,6 +17,7 @@ import android.view.ViewParent;
 public class Board extends View {
     public Board(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
+        setWillNotDraw(false);
     }
 
     @Override
@@ -35,6 +36,7 @@ public class Board extends View {
                 /*String txt = "x: " + (int)event.getX() + " y: " + (int)event.getY();
                 Log.v("motion_test", txt);*/
                 getSquare((int)event.getX(), (int)event.getY());
+                invalidate();
         }
 
         return super.onTouchEvent(event);
@@ -58,11 +60,19 @@ public class Board extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         Paint p = new Paint();
-        p.setColor(Color.RED);
-        p.setStyle(Paint.Style.FILL);
+        if(con){
+            con = false;
+            p.setColor(Color.BLUE);
+            p.setStyle(Paint.Style.FILL);
+            canvas.drawCircle(500, 250, 80, p);
+        }
+        else{
+            con = true;
+            p.setColor(Color.RED);
+            p.setStyle(Paint.Style.FILL);
+            canvas.drawCircle(250, 250, 50, p);
+        }
+        // canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
 
-        if(con) canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
-        con = true;
-        canvas.drawCircle(250, 250, 50, p);
     }
 }

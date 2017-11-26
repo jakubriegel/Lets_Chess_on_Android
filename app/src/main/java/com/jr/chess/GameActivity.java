@@ -25,7 +25,8 @@ public class GameActivity extends AppCompatActivity{
         this.goFullscreen();
 
         board = findViewById(R.id.board_view);
-        board.invalidate();
+        //board.invalidate();
+
 
     }
 
