@@ -9,12 +9,6 @@
     android:gravity="top"
     >
 
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:text="game"/>
-
     <com.jr.chess.views.Board
         android:id="@+id/board_view"
         android:layout_width="match_parent"

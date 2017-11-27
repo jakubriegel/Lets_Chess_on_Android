@@ -5,19 +5,29 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.PorterDuff;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewParent;
+
+import com.jr.chess.Const;
+import com.jr.chess.Piece;
+import com.jr.chess.Position;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
 
 
 public class Board extends View {
     public Board(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-        setWillNotDraw(false);
+
+        startGame();
     }
 
     @Override
@@ -31,48 +41,69 @@ public class Board extends View {
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        switch (event.getAction()){
+        switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                /*String txt = "x: " + (int)event.getX() + " y: " + (int)event.getY();
-                Log.v("motion_test", txt);*/
-                getSquare((int)event.getX(), (int)event.getY());
+                Position touchPosition = getSquare(new Position((int) event.getX(), (int) event.getY()));
+                for(Piece i : pieces) if(i.position.x == touchPosition.x && i.position.y == touchPosition.y) i.position.y++;
+                /*piece = new Piece(getSquare(new Position((int) event.getX(), (int) event.getY())).x, getSquare(new Position((int) event.getX(), (int) event.getY())).y);
+                Log.v("debug_board", "piece.x=" + piece.position.x + " piece.y=" + piece.position.y);*/
                 invalidate();
         }
 
         return super.onTouchEvent(event);
     }
 
-    private void getSquare(int x, int y){
-        int oneWidth = this.getWidth() / 8;
-        String txt = "x: " + x/oneWidth + " y: " + (7-(y/oneWidth));
-        Log.v("motion_test", txt);
-    }
-
-    private class Square{
-        public Square(){
-
-        }
-    }
-
-    private boolean con = false;
-
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+
+        Position temp;
+
         Paint p = new Paint();
-        if(con){
-            con = false;
-            p.setColor(Color.BLUE);
-            p.setStyle(Paint.Style.FILL);
-            canvas.drawCircle(500, 250, 80, p);
+        p.setStyle(Paint.Style.FILL);
+        for(Piece i : pieces) if(i.alive){
+            if(i.color == Const.WHITE) p.setColor(Color.WHITE);
+            else p.setColor(Color.BLACK);
+
+            /*switch (i.type){
+                case Const.PAWN:
+            }*/
+            temp = toPixels(i.position);
+            canvas.drawCircle(temp.x, temp.y, 60, p);
+
         }
-        else{
-            con = true;
-            p.setColor(Color.RED);
-            p.setStyle(Paint.Style.FILL);
-            canvas.drawCircle(250, 250, 50, p);
-        }
-        // canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
+
 
     }
+
+    private Position getSquare(Position p){
+        Position squarePosition = new Position(p.x, p.y); // sidestep to avoid reference
+        int oneWidth = this.getWidth() / 8;
+        squarePosition.x /= oneWidth;
+        squarePosition.y = 7-(squarePosition.y / oneWidth);
+
+        return squarePosition;
+    }
+
+    private Position toPixels(Position p){
+        Position pixelPosition = new Position(p.x, p.y); // sidestep to avoid reference
+        int oneWidth = this.getWidth() / 8;
+        pixelPosition.x = (pixelPosition.x * oneWidth) + (oneWidth / 2);
+        pixelPosition.y = ((7-pixelPosition.y)*oneWidth) + (oneWidth / 2);
+
+        return pixelPosition;
+    }
+
+
+    List<Piece> pieces = new ArrayList<>();
+    private void startGame(){
+
+        for(int i = 0; i < 16; i++) pieces.add(new Piece(Const.WHITE, Const.PAWN));
+        for(int i = 0; i < 16; i++) pieces.add(new Piece(Const.BLACK, Const.PAWN));
+
+        invalidate();
+    }
+
+
 }
+

@@ -13,9 +13,5 @@
 
     </declare-styleable>
 
-    <declare-styleable name="GameCanvas">
-
-    </declare-styleable>
-
 
 </resources>
