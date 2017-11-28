@@ -5,22 +5,18 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
 import com.jr.chess.Const;
-import com.jr.chess.Piece;
+import com.jr.chess.Pieces.Pawn;
+import com.jr.chess.Pieces.Piece;
 import com.jr.chess.Position;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 
 
 public class Board extends View {
@@ -53,27 +49,34 @@ public class Board extends View {
         return super.onTouchEvent(event);
     }
 
+    Paint fillPaint = new Paint();
+    Paint strokePaint = new Paint();
+
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
         Position temp;
 
-        Paint p = new Paint();
-        p.setStyle(Paint.Style.FILL);
+        fillPaint.setStyle(Paint.Style.FILL);
+        strokePaint.setStyle(Paint.Style.STROKE);
+        strokePaint.setStrokeWidth(14);
         for(Piece i : pieces) if(i.alive){
-            if(i.color == Const.WHITE) p.setColor(Color.WHITE);
-            else p.setColor(Color.BLACK);
+            if(i.color == Const.WHITE) fillPaint.setColor(Color.WHITE);
+            else fillPaint.setColor(Color.BLACK);
 
-            /*switch (i.type){
+            switch (i.type){
                 case Const.PAWN:
-            }*/
-            temp = toPixels(i.position);
-            canvas.drawCircle(temp.x, temp.y, 60, p);
+                    temp = toPixels(i.position);
+                    strokePaint.setColor(Color.BLUE);
+                    canvas.drawCircle(temp.x, temp.y, 46, fillPaint);
+                    canvas.drawCircle(temp.x, temp.y, 53, strokePaint);
+
+                break;
+
+            }
 
         }
-
-
     }
 
     private Position getSquare(Position p){
@@ -98,12 +101,21 @@ public class Board extends View {
     List<Piece> pieces = new ArrayList<>();
     private void startGame(){
 
-        for(int i = 0; i < 16; i++) pieces.add(new Piece(Const.WHITE, Const.PAWN));
-        for(int i = 0; i < 16; i++) pieces.add(new Piece(Const.BLACK, Const.PAWN));
+        for (int color = Const.WHITE; color <= Const.BLACK; color++){
+            /*for(int i = 0; i < 16; i++) pieces.add(new Piece(color, Const.PAWN)); TODO: reimplement pieces with new classes
+            pieces.add(new Piece(color, Const.BISHOP));
+            pieces.add(new Piece(color, Const.BISHOP));
+            pieces.add(new Piece(color, Const.KNIGHT));
+            pieces.add(new Piece(color, Const.KNIGHT));
+            pieces.add(new Piece(color, Const.ROOK));
+            pieces.add(new Piece(color, Const.ROOK));
+            pieces.add(new Piece(color, Const.QUEEN));
+            pieces.add(new Piece(color, Const.KING));
+            pieces.add(new Pawn(color, Const.PAWN));*/
+        }
 
         invalidate();
     }
-
 
 }
 
