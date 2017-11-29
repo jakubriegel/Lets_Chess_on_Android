@@ -11,4 +11,7 @@ public interface Const {
     int QUEEN = 105;
     int KING = 106;
 
+    int STATE_SELECT = 201;
+    int STATE_MOVE = 202;
+    int STATE_ATTACK = 203;
 }

@@ -20,6 +20,11 @@ import java.util.List;
 
 
 public class Board extends View {
+
+    private int state;
+    private List<Position> movePointers;
+    private Piece activePiece;
+
     public Board(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
 
@@ -34,16 +39,37 @@ public class Board extends View {
         setMeasuredDimension((int) (parent.getWidth() * .95), (int) (parent.getWidth() * .95));
     }
 
+
+
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 Position touchPosition = getSquare(new Position((int) event.getX(), (int) event.getY()));
-                for(Piece i : pieces) if(i.position.x == touchPosition.x && i.position.y == touchPosition.y) i.position.y++;
-                /*piece = new Piece(getSquare(new Position((int) event.getX(), (int) event.getY())).x, getSquare(new Position((int) event.getX(), (int) event.getY())).y);
-                Log.v("debug_board", "piece.x=" + piece.position.x + " piece.y=" + piece.position.y);*/
-                invalidate();
+                switch (state) {
+                    case Const.STATE_SELECT:
+                        for (Piece i : pieces)
+                            if (i.position.x == touchPosition.x && i.position.y == touchPosition.y) {
+                                movePointers = i.moveXY();
+                                activePiece = i;
+                                state = Const.STATE_MOVE;
+                                invalidate();
+                                break;
+                            }
+                        break;
+
+                    case Const.STATE_MOVE:
+                        state = Const.STATE_SELECT;
+                        for (Position i : movePointers)
+                            if (i.x == touchPosition.x && i.y == touchPosition.y) {
+                                activePiece.position = touchPosition;
+                                //movePointers.clear();
+                        }
+
+                        invalidate();
+                        break;
+                }
         }
 
         return super.onTouchEvent(event);
@@ -60,23 +86,26 @@ public class Board extends View {
 
         fillPaint.setStyle(Paint.Style.FILL);
         strokePaint.setStyle(Paint.Style.STROKE);
+
         strokePaint.setStrokeWidth(14);
         for(Piece i : pieces) if(i.alive){
             if(i.color == Const.WHITE) fillPaint.setColor(Color.WHITE);
             else fillPaint.setColor(Color.BLACK);
 
-            switch (i.type){
-                case Const.PAWN:
-                    temp = toPixels(i.position);
-                    strokePaint.setColor(Color.BLUE);
-                    canvas.drawCircle(temp.x, temp.y, 46, fillPaint);
-                    canvas.drawCircle(temp.x, temp.y, 53, strokePaint);
-
-                break;
-
-            }
-
+            temp = toPixels(i.position);
+            strokePaint.setColor(Color.BLUE);
+            canvas.drawCircle(temp.x, temp.y, 46, fillPaint);
+            canvas.drawCircle(temp.x, temp.y, 53, strokePaint);
         }
+
+        strokePaint.setStrokeWidth(10);
+        for(Position i : movePointers){
+            temp = toPixels(i);
+            strokePaint.setColor(Color.GREEN);
+            canvas.drawCircle(temp.x, temp.y, 30, strokePaint);
+        }
+
+
     }
 
     private Position getSquare(Position p){
@@ -100,10 +129,12 @@ public class Board extends View {
 
     List<Piece> pieces = new ArrayList<>();
     private void startGame(){
+        state = Const.STATE_SELECT;
+        movePointers = new ArrayList<>();
 
         for (int color = Const.WHITE; color <= Const.BLACK; color++){
-            /*for(int i = 0; i < 16; i++) pieces.add(new Piece(color, Const.PAWN)); TODO: reimplement pieces with new classes
-            pieces.add(new Piece(color, Const.BISHOP));
+            for(int i = 0; i < 16; i++) pieces.add(new Pawn(color));
+            /*pieces.add(new Piece(color, Const.BISHOP));
             pieces.add(new Piece(color, Const.BISHOP));
             pieces.add(new Piece(color, Const.KNIGHT));
             pieces.add(new Piece(color, Const.KNIGHT));
