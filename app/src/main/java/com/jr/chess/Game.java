@@ -2,10 +2,12 @@ package com.jr.chess;
 
 import android.view.MotionEvent;
 
+import com.jr.chess.Pieces.Bishop;
 import com.jr.chess.Pieces.Pawn;
 import com.jr.chess.Pieces.Piece;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 class Game {
@@ -23,6 +25,8 @@ class Game {
 
         for (int color = Const.WHITE; color <= Const.BLACK; color++){
             for(int i = 0; i < 16; i++) pieces.add(new Pawn(color));
+            pieces.add(new Bishop(color));
+            pieces.add(new Bishop(color));
             /*pieces.add(new Piece(color, Const.BISHOP));
             pieces.add(new Piece(color, Const.BISHOP));
             pieces.add(new Piece(color, Const.KNIGHT));
@@ -43,7 +47,18 @@ class Game {
                         for (Piece i : pieces)
                             if (Position.areEqual(i.position, touchPosition)) {
                                 movePointers = i.moveXY();
+                                Iterator<Position> tempIterator = movePointers.iterator();
+                                while (tempIterator.hasNext()) {
+                                    Position tempMovePointer = tempIterator.next();
+                                    if(pieceOnSquare(tempMovePointer)) tempIterator.remove();
+                                }
                                 attackPointers = i.attackXY();
+                                tempIterator = attackPointers.iterator();
+                                while (tempIterator.hasNext()) {
+                                    Position tempMovePointer = tempIterator.next();
+                                    if(!pieceOnSquare(tempMovePointer) || getPieceOn(tempMovePointer).color == activePiece.color) tempIterator.remove();
+                                }
+
                                 activePiece = i;
                                 state = Const.STATE_MOVE_ATTACK;
                                 break;
@@ -58,6 +73,7 @@ class Game {
                             }
                         for (Position i : attackPointers)
                             if (Position.areEqual(i, touchPosition)){
+                                pieces.remove(getPieceOn(touchPosition));
                                 activePiece.moveTo(touchPosition);
                             }
                         state = Const.STATE_SELECT;
@@ -66,6 +82,16 @@ class Game {
                         break;
                 }
         }
+    }
+
+    private boolean pieceOnSquare(Position square){
+        for(Piece p : pieces) if (Position.areEqual(p.position, square)) return true;
+        return false;
+    }
+
+    private Piece getPieceOn(Position p){
+        for(Piece i : pieces) if(Position.areEqual(p, i.position)) return i;
+        return null;
     }
 
 

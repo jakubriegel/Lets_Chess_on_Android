@@ -5,4 +5,13 @@
     <color name="colorAccent">#FF4081</color>
 
     <color name="black_overlay">#66000000</color>
+
+    <color name="colorPawn">#3949AB</color>
+    <color name="colorBishop">#43A047</color>
+    <color name="colorKnight">#E53935</color>
+    <color name="colorRook">#6D4C41</color>
+    <color name="colorQueen">#8E24AA</color>
+    <color name="colorKing">#FDD835</color>
+
+
 </resources>

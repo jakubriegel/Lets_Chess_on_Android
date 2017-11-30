@@ -19,6 +19,7 @@ public abstract class Piece{
     public boolean alive;
     public Position position;
     public int color;
+    public String strokeColor;
 
     Piece(int _color){
         alive = true;
@@ -31,5 +32,7 @@ public abstract class Piece{
     public abstract List<Position> moveXY();
     public abstract List<Position> attackXY();
     public abstract void moveTo(Position movePosition);
+
+
 }
 
