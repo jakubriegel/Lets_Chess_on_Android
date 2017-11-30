@@ -8,4 +8,8 @@ public class Position{
         x = _x;
         y = _y;
     }
+
+    public static boolean areEqual(Position a, Position b){
+        return a.x == b.x && a.y == b.y;
+    }
 }

@@ -16,9 +16,15 @@ public class Pawn extends Piece {
     }
 
     @Override
-    Position initialPosition() {
+    public Position initialPosition() {
         if (color == Const.WHITE) return new Position(whitePawns++, 1);
         return new Position(blackPawns++, 6);
+    }
+
+    @Override
+    public void moveTo(Position movePosition) {
+        position = movePosition;
+        if(firstMove) firstMove = false;
     }
 
     @Override
@@ -26,17 +32,11 @@ public class Pawn extends Piece {
         List<Position> moves = new ArrayList<>();
         if (color == Const.WHITE){
             moves.add(new Position(position.x, position.y+1));
-            if (firstMove){
-                moves.add(new Position(position.x, position.y+2));
-                firstMove = false;
-            }
+            if (firstMove) moves.add(new Position(position.x, position.y+2));
         }
         else{
             moves.add(new Position(position.x, position.y-1));
-            if (firstMove){
-                moves.add(new Position(position.x, position.y-2));
-                firstMove = false;
-            }
+            if (firstMove) moves.add(new Position(position.x, position.y-2));
         }
 
         return moves;

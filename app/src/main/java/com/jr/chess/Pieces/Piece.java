@@ -27,9 +27,9 @@ public abstract class Piece{
         position = initialPosition();
     }
 
-    abstract Position initialPosition();
+    public abstract Position initialPosition();
     public abstract List<Position> moveXY();
     public abstract List<Position> attackXY();
-
+    public abstract void moveTo(Position movePosition);
 }
 

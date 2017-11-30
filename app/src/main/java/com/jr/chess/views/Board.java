@@ -11,7 +11,6 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import com.jr.chess.Const;
-import com.jr.chess.Pieces.Pawn;
 import com.jr.chess.Pieces.Piece;
 import com.jr.chess.Position;
 
@@ -20,15 +19,24 @@ import java.util.List;
 
 
 public class Board extends View {
+    Paint fillPaint = new Paint();
+    Paint strokePaint = new Paint();
 
-    private int state;
-    private List<Position> movePointers;
-    private Piece activePiece;
+    List<Piece> piecesToDraw;
+    private List<Position> movePointersToDraw;
+    private List<Position> attackPointersToDraw;
 
     public Board(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
 
-        startGame();
+        piecesToDraw = new ArrayList<>();
+        movePointersToDraw = new ArrayList<>();
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        return super.onTouchEvent(event);
     }
 
     @Override
@@ -38,45 +46,6 @@ public class Board extends View {
         View parent = (View) this.getParent();
         setMeasuredDimension((int) (parent.getWidth() * .95), (int) (parent.getWidth() * .95));
     }
-
-
-
-    @SuppressLint("ClickableViewAccessibility")
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-                Position touchPosition = getSquare(new Position((int) event.getX(), (int) event.getY()));
-                switch (state) {
-                    case Const.STATE_SELECT:
-                        for (Piece i : pieces)
-                            if (i.position.x == touchPosition.x && i.position.y == touchPosition.y) {
-                                movePointers = i.moveXY();
-                                activePiece = i;
-                                state = Const.STATE_MOVE;
-                                invalidate();
-                                break;
-                            }
-                        break;
-
-                    case Const.STATE_MOVE:
-                        state = Const.STATE_SELECT;
-                        for (Position i : movePointers)
-                            if (i.x == touchPosition.x && i.y == touchPosition.y) {
-                                activePiece.position = touchPosition;
-                                //movePointers.clear();
-                        }
-
-                        invalidate();
-                        break;
-                }
-        }
-
-        return super.onTouchEvent(event);
-    }
-
-    Paint fillPaint = new Paint();
-    Paint strokePaint = new Paint();
 
     @Override
     protected void onDraw(Canvas canvas) {
@@ -88,7 +57,7 @@ public class Board extends View {
         strokePaint.setStyle(Paint.Style.STROKE);
 
         strokePaint.setStrokeWidth(14);
-        for(Piece i : pieces) if(i.alive){
+        for(Piece i : piecesToDraw) if(i.alive){
             if(i.color == Const.WHITE) fillPaint.setColor(Color.WHITE);
             else fillPaint.setColor(Color.BLACK);
 
@@ -99,16 +68,28 @@ public class Board extends View {
         }
 
         strokePaint.setStrokeWidth(10);
-        for(Position i : movePointers){
+        strokePaint.setColor(Color.GREEN);
+        for(Position i : movePointersToDraw){
             temp = toPixels(i);
-            strokePaint.setColor(Color.GREEN);
+            canvas.drawCircle(temp.x, temp.y, 30, strokePaint);
+        }
+        strokePaint.setColor(Color.RED);
+        for(Position i : attackPointersToDraw){
+            temp = toPixels(i);
             canvas.drawCircle(temp.x, temp.y, 30, strokePaint);
         }
 
-
     }
 
-    private Position getSquare(Position p){
+    public void redraw(List<Piece> pieces, List<Position> movePointers, List<Position> attackPointers){
+        piecesToDraw = pieces;
+        movePointersToDraw = movePointers;
+        attackPointersToDraw = attackPointers;
+
+        invalidate();
+    }
+
+    public Position getSquare(Position p){
         Position squarePosition = new Position(p.x, p.y); // sidestep to avoid reference
         int oneWidth = this.getWidth() / 8;
         squarePosition.x /= oneWidth;
@@ -127,26 +108,6 @@ public class Board extends View {
     }
 
 
-    List<Piece> pieces = new ArrayList<>();
-    private void startGame(){
-        state = Const.STATE_SELECT;
-        movePointers = new ArrayList<>();
-
-        for (int color = Const.WHITE; color <= Const.BLACK; color++){
-            for(int i = 0; i < 16; i++) pieces.add(new Pawn(color));
-            /*pieces.add(new Piece(color, Const.BISHOP));
-            pieces.add(new Piece(color, Const.BISHOP));
-            pieces.add(new Piece(color, Const.KNIGHT));
-            pieces.add(new Piece(color, Const.KNIGHT));
-            pieces.add(new Piece(color, Const.ROOK));
-            pieces.add(new Piece(color, Const.ROOK));
-            pieces.add(new Piece(color, Const.QUEEN));
-            pieces.add(new Piece(color, Const.KING));
-            pieces.add(new Pawn(color, Const.PAWN));*/
-        }
-
-        invalidate();
-    }
 
 }
 
