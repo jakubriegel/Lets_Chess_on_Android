@@ -1,5 +1,7 @@
 package com.jr.chess.Pieces;
 
+import android.content.Context;
+
 import com.jr.chess.Const;
 import com.jr.chess.Position;
 
@@ -19,9 +21,12 @@ public abstract class Piece{
     public boolean alive;
     public Position position;
     public int color;
-    public String strokeColor;
+    public int strokeColor;
 
-    Piece(int _color){
+    Context context;
+
+    public Piece(Context c, int _color){
+        context = c;
         alive = true;
         color = _color;
 

@@ -7,12 +7,14 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
 import com.jr.chess.Const;
 import com.jr.chess.Pieces.Piece;
 import com.jr.chess.Position;
+import com.jr.chess.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,6 +49,7 @@ public class Board extends View {
         setMeasuredDimension((int) (parent.getWidth() * .95), (int) (parent.getWidth() * .95));
     }
 
+    @SuppressLint("ResourceAsColor")
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
@@ -62,7 +65,8 @@ public class Board extends View {
             else fillPaint.setColor(Color.BLACK);
 
             temp = toPixels(i.position);
-            strokePaint.setColor(Color.BLUE);
+            strokePaint.setColor(i.strokeColor);
+
             canvas.drawCircle(temp.x, temp.y, 46, fillPaint);
             canvas.drawCircle(temp.x, temp.y, 53, strokePaint);
         }

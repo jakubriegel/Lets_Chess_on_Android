@@ -1,8 +1,11 @@
 package com.jr.chess;
 
+import android.content.Context;
 import android.view.MotionEvent;
 
 import com.jr.chess.Pieces.Bishop;
+import com.jr.chess.Pieces.King;
+import com.jr.chess.Pieces.Knight;
 import com.jr.chess.Pieces.Pawn;
 import com.jr.chess.Pieces.Piece;
 
@@ -17,6 +20,12 @@ class Game {
     private Piece activePiece;
     List<Piece> pieces;
 
+    Context context;
+
+    Game(Context c){
+        context = c;
+    }
+
     void startGame(){
         state = Const.STATE_SELECT;
         pieces = new ArrayList<>();
@@ -24,9 +33,15 @@ class Game {
         attackPointers = new ArrayList<>();
 
         for (int color = Const.WHITE; color <= Const.BLACK; color++){
-            for(int i = 0; i < 16; i++) pieces.add(new Pawn(color));
-            pieces.add(new Bishop(color));
-            pieces.add(new Bishop(color));
+            for(int i = 0; i < 16; i++) pieces.add(new Pawn(context, color));
+            pieces.add(new Bishop(context, color));
+            pieces.add(new Bishop(context, color));
+            pieces.add(new Knight(context, color));
+            pieces.add(new Knight(context, color));
+
+
+            pieces.add(new King(context, color));
+
             /*pieces.add(new Piece(color, Const.BISHOP));
             pieces.add(new Piece(color, Const.BISHOP));
             pieces.add(new Piece(color, Const.KNIGHT));
@@ -46,6 +61,7 @@ class Game {
                     case Const.STATE_SELECT:
                         for (Piece i : pieces)
                             if (Position.areEqual(i.position, touchPosition)) {
+                                activePiece = i;
                                 movePointers = i.moveXY();
                                 Iterator<Position> tempIterator = movePointers.iterator();
                                 while (tempIterator.hasNext()) {
@@ -55,11 +71,13 @@ class Game {
                                 attackPointers = i.attackXY();
                                 tempIterator = attackPointers.iterator();
                                 while (tempIterator.hasNext()) {
-                                    Position tempMovePointer = tempIterator.next();
-                                    if(!pieceOnSquare(tempMovePointer) || getPieceOn(tempMovePointer).color == activePiece.color) tempIterator.remove();
+                                    Position tempAttackPointer = tempIterator.next();
+                                    if(!pieceOnSquare(tempAttackPointer)
+                                            || getPieceOn(tempAttackPointer).color == activePiece.color)
+                                        tempIterator.remove();
                                 }
 
-                                activePiece = i;
+
                                 state = Const.STATE_MOVE_ATTACK;
                                 break;
                             }

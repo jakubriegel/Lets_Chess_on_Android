@@ -21,7 +21,7 @@ public class GameActivity extends AppCompatActivity{
         setContentView(R.layout.activity_game);
         this.goFullscreen();
 
-        game = new Game();
+        game = new Game(this);
         game.startGame();
 
         board = findViewById(R.id.board_view);

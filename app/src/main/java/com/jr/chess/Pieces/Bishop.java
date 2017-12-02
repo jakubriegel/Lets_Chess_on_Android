@@ -1,15 +1,21 @@
 package com.jr.chess.Pieces;
 
+import android.content.Context;
+import android.graphics.Color;
+import android.support.v4.content.ContextCompat;
+import android.util.Log;
+
 import com.jr.chess.Const;
 import com.jr.chess.Position;
 import com.jr.chess.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Bishop extends Piece {
-    public Bishop(int _color) {
-        super(_color);
-
+    public Bishop(Context c, int _color) {
+        super(c, _color);
+        strokeColor = ContextCompat.getColor(context, R.color.colorBishop);
     }
 
     @Override
@@ -20,12 +26,24 @@ public class Bishop extends Piece {
 
     @Override
     public List<Position> moveXY() {
-        return null;
+        List<Position> moves = new ArrayList<>();
+        for (int x = position.x, y = position.y; x < 8 && y < 8; x++, y++ ) moves.add(new Position(x, y));
+        for (int x = position.x, y = position.y; x >= 0 && y < 8; x--, y++ ) moves.add(new Position(x, y));
+        for (int x = position.x, y = position.y; x < 8 && y >= 0; x++, y-- ) moves.add(new Position(x, y));
+        for (int x = position.x, y = position.y; x >= 0 && y >= 0; x--, y-- ) moves.add(new Position(x, y));
+
+        return moves;
     }
 
     @Override
     public List<Position> attackXY() {
-        return null;
+        List<Position> attacks = new ArrayList<>();
+        for (int x = position.x, y = position.y; x < 8 && y < 8; x++, y++ ) attacks.add(new Position(x, y));
+        for (int x = position.x, y = position.y; x >= 0 && y < 8; x--, y++ ) attacks.add(new Position(x, y));
+        for (int x = position.x, y = position.y; x < 8 && y >= 0; x++, y-- ) attacks.add(new Position(x, y));
+        for (int x = position.x, y = position.y; x >= 0 && y >= 0; x--, y-- ) attacks.add(new Position(x, y));
+
+        return attacks;
     }
 
     @Override
