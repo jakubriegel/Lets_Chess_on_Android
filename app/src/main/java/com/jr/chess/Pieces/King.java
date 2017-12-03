@@ -27,7 +27,8 @@ public class King extends Piece {
     public List<Position> moveXY() {
         List<Position> moves = new ArrayList<>();
         for (int x = position.x-1; x <= position.x+1; x++)
-            for(int y = position.y-1; y <= position.y+1; y++) moves.add(new Position(x, y));
+            for(int y = position.y-1; y <= position.y+1; y++)
+                if(!(x == position.x && y == position.y)) moves.add(new Position(x, y)); // NAND
         return moves;
     }
 
@@ -35,7 +36,8 @@ public class King extends Piece {
     public List<Position> attackXY() {
         List<Position> attacks = new ArrayList<>();
         for (int x = position.x-1; x <= position.x+1; x++)
-            for(int y = position.y-1; y <= position.y+1; y++) attacks.add(new Position(x, y));
+            for(int y = position.y-1; y <= position.y+1; y++)
+                if(!(x == position.x && y == position.y)) attacks.add(new Position(x, y)); // NAND
         return attacks;
     }
 

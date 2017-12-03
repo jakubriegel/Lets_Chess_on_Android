@@ -1,6 +1,7 @@
 package com.jr.chess;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.MotionEvent;
 
 import com.jr.chess.Pieces.Bishop;
@@ -12,6 +13,8 @@ import com.jr.chess.Pieces.Piece;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
+
 
 class Game {
     private int state;
@@ -59,22 +62,48 @@ class Game {
             case MotionEvent.ACTION_DOWN:
                 switch (state) {
                     case Const.STATE_SELECT:
-                        for (Piece i : pieces)
-                            if (Position.areEqual(i.position, touchPosition)) {
+                        for (Piece i : pieces) if (Position.areEqual(i.position, touchPosition)) {
                                 activePiece = i;
                                 movePointers = i.moveXY();
-                                Iterator<Position> tempIterator = movePointers.iterator();
+                                ListIterator<Position> tempIterator = movePointers.listIterator();
+                                int tempX, tempY, sigX, sigY;
+                                Position tempMovePointer;
                                 while (tempIterator.hasNext()) {
-                                    Position tempMovePointer = tempIterator.next();
-                                    if(pieceOnSquare(tempMovePointer)) tempIterator.remove();
+                                    tempMovePointer = tempIterator.next();
+                                    if(pieceOnSquare(tempMovePointer)){
+                                        tempIterator.remove();
+                                        tempX = tempMovePointer.x; tempY = tempMovePointer.y;
+                                        sigX = (int) Math.signum(activePiece.position.x - tempX);
+                                        sigY = (int) Math.signum(activePiece.position.y - tempY);
+                                        while(tempIterator.hasNext()){
+                                            tempMovePointer = tempIterator.next();
+                                            tempX = tempMovePointer.x; tempY = tempMovePointer.y;
+                                            if(sigX == Math.signum(activePiece.position.x - tempX)
+                                                && sigY == Math.signum((activePiece.position.y - tempY))) {
+                                                tempIterator.remove();
+                                            }
+                                            else{
+                                                tempIterator.previous();
+                                                break;
+                                            }
+                                        }
+                                    }
                                 }
+
+
+
+
+
                                 attackPointers = i.attackXY();
-                                tempIterator = attackPointers.iterator();
+                                tempIterator = attackPointers.listIterator();
                                 while (tempIterator.hasNext()) {
                                     Position tempAttackPointer = tempIterator.next();
                                     if(!pieceOnSquare(tempAttackPointer)
-                                            || getPieceOn(tempAttackPointer).color == activePiece.color)
+                                            || getPieceOn(tempAttackPointer).color == activePiece.color){
                                         tempIterator.remove();
+
+                                    }
+
                                 }
 
 

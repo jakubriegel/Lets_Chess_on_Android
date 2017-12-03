@@ -27,10 +27,10 @@ public class Bishop extends Piece {
     @Override
     public List<Position> moveXY() {
         List<Position> moves = new ArrayList<>();
-        for (int x = position.x, y = position.y; x < 8 && y < 8; x++, y++ ) moves.add(new Position(x, y));
-        for (int x = position.x, y = position.y; x >= 0 && y < 8; x--, y++ ) moves.add(new Position(x, y));
-        for (int x = position.x, y = position.y; x < 8 && y >= 0; x++, y-- ) moves.add(new Position(x, y));
-        for (int x = position.x, y = position.y; x >= 0 && y >= 0; x--, y-- ) moves.add(new Position(x, y));
+        for (int x = position.x+1, y = position.y+1; x < 8 && y < 8; x++, y++ ) moves.add(new Position(x, y));
+        for (int x = position.x-1, y = position.y+1; x >= 0 && y < 8; x--, y++ ) moves.add(new Position(x, y));
+        for (int x = position.x+1, y = position.y-1; x < 8 && y >= 0; x++, y-- ) moves.add(new Position(x, y));
+        for (int x = position.x-1, y = position.y-1; x >= 0 && y >= 0; x--, y-- ) moves.add(new Position(x, y));
 
         return moves;
     }
@@ -38,10 +38,10 @@ public class Bishop extends Piece {
     @Override
     public List<Position> attackXY() {
         List<Position> attacks = new ArrayList<>();
-        for (int x = position.x, y = position.y; x < 8 && y < 8; x++, y++ ) attacks.add(new Position(x, y));
-        for (int x = position.x, y = position.y; x >= 0 && y < 8; x--, y++ ) attacks.add(new Position(x, y));
-        for (int x = position.x, y = position.y; x < 8 && y >= 0; x++, y-- ) attacks.add(new Position(x, y));
-        for (int x = position.x, y = position.y; x >= 0 && y >= 0; x--, y-- ) attacks.add(new Position(x, y));
+        for (int x = position.x+1, y = position.y+1; x < 8 && y < 8; x++, y++ ) attacks.add(new Position(x, y));
+        for (int x = position.x-1, y = position.y+1; x >= 0 && y < 8; x--, y++ ) attacks.add(new Position(x, y));
+        for (int x = position.x+1, y = position.y-1; x < 8 && y >= 0; x++, y-- ) attacks.add(new Position(x, y));
+        for (int x = position.x-1, y = position.y-1; x >= 0 && y >= 0; x--, y-- ) attacks.add(new Position(x, y));
 
         return attacks;
     }
