@@ -9,6 +9,8 @@ import com.jr.chess.Pieces.King;
 import com.jr.chess.Pieces.Knight;
 import com.jr.chess.Pieces.Pawn;
 import com.jr.chess.Pieces.Piece;
+import com.jr.chess.Pieces.Queen;
+import com.jr.chess.Pieces.Rook;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -41,19 +43,10 @@ class Game {
             pieces.add(new Bishop(context, color));
             pieces.add(new Knight(context, color));
             pieces.add(new Knight(context, color));
-
-
+            pieces.add(new Rook(context, color));
+            pieces.add(new Rook(context, color));
+            pieces.add(new Queen(context, color));
             pieces.add(new King(context, color));
-
-            /*pieces.add(new Piece(color, Const.BISHOP));
-            pieces.add(new Piece(color, Const.BISHOP));
-            pieces.add(new Piece(color, Const.KNIGHT));
-            pieces.add(new Piece(color, Const.KNIGHT));
-            pieces.add(new Piece(color, Const.ROOK));
-            pieces.add(new Piece(color, Const.ROOK));
-            pieces.add(new Piece(color, Const.QUEEN));
-            pieces.add(new Piece(color, Const.KING));
-            pieces.add(new Pawn(color, Const.PAWN));*/
         }
     }
 
@@ -79,9 +72,8 @@ class Game {
                                             tempMovePointer = tempIterator.next();
                                             tempX = tempMovePointer.x; tempY = tempMovePointer.y;
                                             if(sigX == Math.signum(activePiece.position.x - tempX)
-                                                && sigY == Math.signum((activePiece.position.y - tempY))) {
+                                                && sigY == Math.signum((activePiece.position.y - tempY)))
                                                 tempIterator.remove();
-                                            }
                                             else{
                                                 tempIterator.previous();
                                                 break;
@@ -89,19 +81,29 @@ class Game {
                                         }
                                     }
                                 }
-
-
-
-
-
                                 attackPointers = i.attackXY();
                                 tempIterator = attackPointers.listIterator();
+                                Position tempAttackPointer;
                                 while (tempIterator.hasNext()) {
-                                    Position tempAttackPointer = tempIterator.next();
-                                    if(!pieceOnSquare(tempAttackPointer)
-                                            || getPieceOn(tempAttackPointer).color == activePiece.color){
-                                        tempIterator.remove();
-
+                                    tempAttackPointer = tempIterator.next();
+                                    if(!pieceOnSquare(tempAttackPointer)) tempIterator.remove();
+                                    else {
+                                        if(getPieceOn(tempAttackPointer).color == activePiece.color)
+                                            tempIterator.remove();
+                                        tempX = tempAttackPointer.x; tempY = tempAttackPointer.y;
+                                        sigX = (int) Math.signum(activePiece.position.x - tempX);
+                                        sigY = (int) Math.signum(activePiece.position.y - tempY);
+                                        while(tempIterator.hasNext()){
+                                            tempAttackPointer = tempIterator.next();
+                                            tempX = tempAttackPointer.x; tempY = tempAttackPointer.y;
+                                            if(sigX == Math.signum(activePiece.position.x - tempX)
+                                                    && sigY == Math.signum((activePiece.position.y - tempY)))
+                                                tempIterator.remove();
+                                            else{
+                                                tempIterator.previous();
+                                                break;
+                                            }
+                                        }
                                     }
 
                                 }

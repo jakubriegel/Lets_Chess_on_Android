@@ -23,6 +23,8 @@ public abstract class Piece{
     public int color;
     public int strokeColor;
 
+    public boolean firstMove;
+
     Context context;
 
     public Piece(Context c, int _color){
@@ -36,7 +38,11 @@ public abstract class Piece{
     public abstract Position initialPosition();
     public abstract List<Position> moveXY();
     public abstract List<Position> attackXY();
-    public abstract void moveTo(Position movePosition);
+
+    public void moveTo(Position movePosition) {
+        position = movePosition;
+        if(firstMove) firstMove = false;
+    }
 
 
 }

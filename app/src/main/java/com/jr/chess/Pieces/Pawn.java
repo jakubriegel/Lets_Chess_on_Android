@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Pawn extends Piece {
-    private boolean firstMove;
 
     public Pawn(Context c, int _color) {
         super(c, _color);
@@ -52,11 +51,5 @@ public class Pawn extends Piece {
             attacks.add(new Position(position.x-1, position.y-1));
         }
         return attacks;
-    }
-
-    @Override
-    public void moveTo(Position movePosition) {
-        position = movePosition;
-        if(firstMove) firstMove = false;
     }
 }

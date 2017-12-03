@@ -52,8 +52,4 @@ public class Knight extends Piece {
         return attacks;
     }
 
-    @Override
-    public void moveTo(Position movePosition) {
-        position = movePosition;
-    }
 }
