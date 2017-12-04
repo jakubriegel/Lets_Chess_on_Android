@@ -25,8 +25,10 @@ public class Rook extends Piece {
     @Override
     public List<Position> moveXY() {
         List<Position> moves = new ArrayList<>();
-        for (int x = 0; x < 8; x++) moves.add(new Position(x, position.y));
-        for (int y = 0; y < 8; y++) moves.add(new Position(position.x, y));
+        for (int x = position.x+1; x < 8; x++) moves.add(new Position(x, position.y));
+        for (int x = position.x-1; x >= 0; x--) moves.add(new Position(x, position.y));
+        for (int y = position.y+1; y < 8; y++) moves.add(new Position(position.x, y));
+        for (int y = position.y-1; y >= 0; y--) moves.add(new Position(position.x, y));
 
         return moves;
     }
@@ -34,8 +36,10 @@ public class Rook extends Piece {
     @Override
     public List<Position> attackXY() {
         List<Position> attacks = new ArrayList<>();
-        for (int x = 0; x < 8; x++) attacks.add(new Position(x, position.y));
-        for (int y = 0; y < 8; y++) attacks.add(new Position(position.x, y));
+        for (int x = position.x+1; x < 8; x++) attacks.add(new Position(x, position.y));
+        for (int x = position.x-1; x >= 0; x--) attacks.add(new Position(x, position.y));
+        for (int y = position.y+1; y < 8; y++) attacks.add(new Position(position.x, y));
+        for (int y = position.y-1; y >= 0; y--) attacks.add(new Position(position.x, y));
 
         return attacks;
     }

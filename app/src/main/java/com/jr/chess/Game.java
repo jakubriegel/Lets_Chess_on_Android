@@ -119,12 +119,15 @@ class Game {
                         for (Position i : movePointers)
                             if (Position.areEqual(i, touchPosition)) {
                                 activePiece.moveTo(touchPosition);
+                                break;
                             }
                         for (Position i : attackPointers)
                             if (Position.areEqual(i, touchPosition)){
                                 pieces.remove(getPieceOn(touchPosition));
                                 activePiece.moveTo(touchPosition);
+                                break;
                             }
+
                         state = Const.STATE_SELECT;
                         movePointers = new ArrayList<>();
                         attackPointers = new ArrayList<>();
