@@ -6,13 +6,16 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.TextView;
 
 import com.jr.chess.views.Board;
 
 public class GameActivity extends AppCompatActivity{
 
     Game game;
+
     Board board;
+    TextView activeColorText;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -27,6 +30,8 @@ public class GameActivity extends AppCompatActivity{
         board = findViewById(R.id.board_view);
         board.redraw(game.pieces, game.movePointers, game.attackPointers);
 
+        activeColorText = findViewById(R.id.active_color_text);
+
         board.setOnTouchListener(new View.OnTouchListener() {
             @SuppressLint("ClickableViewAccessibility")
             @Override
@@ -35,6 +40,8 @@ public class GameActivity extends AppCompatActivity{
                 game.processTouch(event, p);
 
                 board.redraw(game.pieces, game.movePointers, game.attackPointers);
+                updateInfo();
+
                 return true;
             }
         });
@@ -49,6 +56,11 @@ public class GameActivity extends AppCompatActivity{
         newUiOptions ^= View.SYSTEM_UI_FLAG_FULLSCREEN;
         newUiOptions ^= View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
         getWindow().getDecorView().setSystemUiVisibility(newUiOptions);
+    }
+
+    private void updateInfo(){
+        if(game.activeColor == Const.WHITE) activeColorText.setText("Player: WHITE");
+        else activeColorText.setText("Player: BLACK");
     }
 
 }

@@ -9,10 +9,12 @@ import com.jr.chess.R;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class Knight extends Piece {
     public Knight(Context c, int _color) {
         super(c, _color);
+        type = Const.KNIGHT;
         strokeColor = ContextCompat.getColor(context, R.color.colorKnight);
     }
 

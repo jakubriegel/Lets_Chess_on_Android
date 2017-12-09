@@ -14,8 +14,8 @@ public class Pawn extends Piece {
 
     public Pawn(Context c, int _color) {
         super(c, _color);
+        type = Const.PAWN;
         strokeColor = ContextCompat.getColor(context, R.color.colorPawn);
-        firstMove = true;
     }
 
     @Override

@@ -17,6 +17,7 @@ import java.util.List;
 public class Queen extends Piece {
     public Queen(Context c, int _color) {
         super(c, _color);
+        type = Const.QUEEN;
         strokeColor = ContextCompat.getColor(context, R.color.colorQueen);
     }
 

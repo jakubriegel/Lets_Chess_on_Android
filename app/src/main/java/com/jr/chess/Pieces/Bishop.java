@@ -15,6 +15,7 @@ import java.util.List;
 public class Bishop extends Piece {
     public Bishop(Context c, int _color) {
         super(c, _color);
+        type = Const.BISHOP;
         strokeColor = ContextCompat.getColor(context, R.color.colorBishop);
     }
 

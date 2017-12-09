@@ -13,6 +13,7 @@ import java.util.List;
 public class Rook extends Piece {
     public Rook(Context c, int _color) {
         super(c, _color);
+        type = Const.ROOK;
         strokeColor = ContextCompat.getColor(context, R.color.colorRook);
     }
 

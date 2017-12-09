@@ -18,6 +18,7 @@ public abstract class Piece{
     static int whiteRooks = 0;
     static int blackRooks = 0;
 
+    public int type;
     public boolean alive;
     public Position position;
     public int color;
@@ -31,6 +32,7 @@ public abstract class Piece{
         context = c;
         alive = true;
         color = _color;
+        firstMove = true;
 
         position = initialPosition();
     }
