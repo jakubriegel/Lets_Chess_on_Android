@@ -1,7 +1,6 @@
 package com.jr.chess;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.MotionEvent;
 
 import com.jr.chess.Pieces.Bishop;
@@ -12,10 +11,10 @@ import com.jr.chess.Pieces.Piece;
 import com.jr.chess.Pieces.Queen;
 import com.jr.chess.Pieces.Rook;
 
-import java.io.PipedOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 
 class Game {
@@ -25,6 +24,7 @@ class Game {
     private Piece activePiece;
     int activeColor;
     List<Piece> pieces;
+    Piece whiteKing, blackKing;
 
     private Context context;
 
@@ -50,6 +50,23 @@ class Game {
             pieces.add(new Rook(context, color));
             pieces.add(new Queen(context, color));
             pieces.add(new King(context, color));
+            if(color == Const.WHITE) whiteKing = pieces.get(pieces.size()-1);
+            else blackKing = pieces.get(pieces.size()-1);
+        }
+    }
+
+    private void changeTurn(){
+        boolean check = false;
+
+        // change to BLACK
+        if(activeColor == Const.WHITE){
+            activeColor = Const.BLACK;
+            if(isSquareAttacked(blackKing.position, blackKing)) check = true;
+        }
+        // change to WHITE
+        else{
+            activeColor = Const.WHITE;
+            if(isSquareAttacked(whiteKing.position, whiteKing)) check = true;
         }
     }
 
@@ -67,6 +84,10 @@ class Game {
                                     movePointers = removeAttacked(movePointers, activePiece);
                                     attackPointers = removeAttacked(attackPointers, activePiece);
                                 }
+                                else{
+                                    movePointers = makeKingSafe(activePiece, movePointers);
+                                    attackPointers = makeKingSafe(activePiece, attackPointers);
+                                }
                                 state = Const.STATE_MOVE_ATTACK;
                                 break;
                             }
@@ -77,14 +98,14 @@ class Game {
                         for (Position i : movePointers)
                             if (Position.areEqual(i, touchPosition)) {
                                 activePiece.moveTo(touchPosition);
-                                changeActiveColor();
+                                changeTurn();
                                 break;
                             }
                         for (Position i : attackPointers)
                             if (Position.areEqual(i, touchPosition)){
                                 pieces.remove(getPieceOn(touchPosition));
                                 activePiece.moveTo(touchPosition);
-                                changeActiveColor();
+                                changeTurn();
                                 break;
                             }
 
@@ -104,11 +125,6 @@ class Game {
     private Piece getPieceOn(Position p){
         for(Piece i : pieces) if(Position.areEqual(p, i.position)) return i;
         return null;
-    }
-
-    private void changeActiveColor(){
-        if(activeColor == Const.WHITE) activeColor = Const.BLACK;
-        else activeColor = Const.WHITE;
     }
 
     private List<Position> getMovePointers(Piece p){
@@ -172,14 +188,23 @@ class Game {
             return tempAttackPointers;
     }
 
+    private boolean isKingSafe(){
+        return true;
+    }
+
+    private List<Position> makeKingSafe(Piece movingPiece, List<Position> squares){
+        Piece king;
+        if(movingPiece.color == Const.WHITE) king = whiteKing;
+        else king = blackKing;
+        return removeAttacked(squares, king, movingPiece);
+    }
+
     private boolean isSquareAttacked(Position square, Piece protectedPiece){
         Position protectedPiecePosition = protectedPiece.position;
         protectedPiece.position = square;
         for(Piece i : pieces) if(i.color != protectedPiece.color) {
             for (Position attackedSquare : getAttackPointers(i))
                 if (Position.areEqual(square, attackedSquare)) {
-                    Log.v(Const.DEBUG_TAG, i.getClass().getName());
-                    for (Position attackedSquarer : getAttackPointers(i)) Log.v(Const.DEBUG_TAG, attackedSquarer.x + " " + attackedSquarer.y);
                     protectedPiece.position = protectedPiecePosition;
                     return true;
                 }
@@ -197,5 +222,19 @@ class Game {
         }
         return squares;
     }
+
+    // overloaded for making King safe
+    private List<Position> removeAttacked(List<Position> squares, Piece protectedPiece, Piece movingPiece){
+        ListIterator<Position> squaresIterator = squares.listIterator();
+        Position movingPiecePosition = movingPiece.position;
+        while(squaresIterator.hasNext()) {
+            movingPiece.position = squaresIterator.next();
+            if(isSquareAttacked(protectedPiece.position, protectedPiece)) squaresIterator.remove();
+        }
+        movingPiece.position = movingPiecePosition;
+        return squares;
+    }
+
+
 
 }
