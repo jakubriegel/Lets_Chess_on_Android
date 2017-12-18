@@ -1,6 +1,7 @@
 package com.jr.chess;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.MotionEvent;
 
 import com.jr.chess.Pieces.Bishop;
@@ -118,11 +119,13 @@ class Game {
     }
 
     private boolean pieceOnSquare(Position square){
-        for(Piece p : pieces) if (Position.areEqual(p.position, square)) return true;
+        for(Piece p : pieces) if(p.position != null) // may be null because of getPieceOn()
+
+            if (Position.areEqual(p.position, square)) return true;
         return false;
     }
 
-    private Piece getPieceOn(Position p){
+    private Piece getPieceOn(Position p){ // TODO: fix null exception
         for(Piece i : pieces) if(Position.areEqual(p, i.position)) return i;
         return null;
     }
@@ -188,10 +191,6 @@ class Game {
             return tempAttackPointers;
     }
 
-    private boolean isKingSafe(){
-        return true;
-    }
-
     private List<Position> makeKingSafe(Piece movingPiece, List<Position> squares){
         Piece king;
         if(movingPiece.color == Const.WHITE) king = whiteKing;
@@ -202,7 +201,7 @@ class Game {
     private boolean isSquareAttacked(Position square, Piece protectedPiece){
         Position protectedPiecePosition = protectedPiece.position;
         protectedPiece.position = square;
-        for(Piece i : pieces) if(i.color != protectedPiece.color) {
+        for(Piece i : pieces) if(i.position != null) if(i.color != protectedPiece.color) { // may be null because of getPieceOn()
             for (Position attackedSquare : getAttackPointers(i))
                 if (Position.areEqual(square, attackedSquare)) {
                     protectedPiece.position = protectedPiecePosition;
@@ -213,6 +212,7 @@ class Game {
         return false;
     }
 
+    // deleting attacked squares from kings moves
     private List<Position> removeAttacked(List<Position> squares, Piece protectedPiece){
         ListIterator<Position> squaresIterator = squares.listIterator();
         Position tempSquare;
@@ -223,13 +223,23 @@ class Game {
         return squares;
     }
 
-    // overloaded for making King safe
+    // overloaded for making King safe when other pieces move
     private List<Position> removeAttacked(List<Position> squares, Piece protectedPiece, Piece movingPiece){
         ListIterator<Position> squaresIterator = squares.listIterator();
-        Position movingPiecePosition = movingPiece.position;
+        Position movingPiecePosition = movingPiece.position, tempSquare;
+        Piece deletedPiece = null;
         while(squaresIterator.hasNext()) {
-            movingPiece.position = squaresIterator.next();
+            tempSquare = squaresIterator.next();
+            if(pieceOnSquare(tempSquare)){
+                deletedPiece = getPieceOn(tempSquare);
+                pieces.remove(deletedPiece);
+            }
+            movingPiece.position = tempSquare;
             if(isSquareAttacked(protectedPiece.position, protectedPiece)) squaresIterator.remove();
+            if(deletedPiece != null){
+                pieces.add(deletedPiece);
+                deletedPiece = null;
+            }
         }
         movingPiece.position = movingPiecePosition;
         return squares;
