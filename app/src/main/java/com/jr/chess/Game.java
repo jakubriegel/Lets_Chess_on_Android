@@ -13,19 +13,22 @@ import com.jr.chess.Pieces.Queen;
 import com.jr.chess.Pieces.Rook;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 
 class Game {
-    private int state;
+    int state;
     List<Position> movePointers;
     List<Position> attackPointers;
     private Piece activePiece;
     int activeColor;
     List<Piece> pieces;
-    Piece whiteKing, blackKing;
+    private Piece whiteKing, blackKing;
+
+    int winner;
 
     private Context context;
 
@@ -33,7 +36,7 @@ class Game {
         context = c;
     }
 
-    void startGame(){
+    void start(){
         state = Const.STATE_SELECT;
         pieces = new ArrayList<>();
         movePointers = new ArrayList<>();
@@ -56,18 +59,38 @@ class Game {
         }
     }
 
-    private void changeTurn(){
-        boolean check = false;
+    // case someone won
+    private void end(int w){
+        state = Const.STATE_END;
+        winner = w;
+        Log.v(Const.DEBUG_TAG, "end - END OF THE GAME ");
 
+    }
+
+    //case draw
+    private void end(){
+        state = Const.STATE_END;
+
+    }
+
+    private void changeTurn(){
+        Piece king;
         // change to BLACK
         if(activeColor == Const.WHITE){
             activeColor = Const.BLACK;
-            if(isSquareAttacked(blackKing.position, blackKing)) check = true;
+            king = blackKing;
         }
         // change to WHITE
         else{
             activeColor = Const.WHITE;
-            if(isSquareAttacked(whiteKing.position, whiteKing)) check = true;
+            king = whiteKing;
+        }
+
+        if(isSquareAttacked(king.position, king)){
+            if(mayCheckBeAvoided(king)) return;
+            Log.v(Const.DEBUG_TAG, "change turn - someone won");
+            if(activeColor == Const.WHITE) end(Const.BLACK);
+            else end(Const.WHITE);
         }
     }
 
@@ -114,6 +137,10 @@ class Game {
                         movePointers = new ArrayList<>();
                         attackPointers = new ArrayList<>();
                         break;
+
+                    case Const.STATE_END:
+                        Log.v(Const.DEBUG_TAG, "processTouch - state_end, doing nothing");
+                        break;
                 }
         }
     }
@@ -137,6 +164,10 @@ class Game {
         Position tempMovePointer;
         while (tempIterator.hasNext()) {
             tempMovePointer = tempIterator.next();
+            if(tempMovePointer.x > 7 || tempMovePointer.x < 0 || tempMovePointer.y > 7 || tempMovePointer.y < 0){
+                tempIterator.remove();
+                continue;
+            }
             if(pieceOnSquare(tempMovePointer)){
                 tempIterator.remove();
                 tempX = tempMovePointer.x; tempY = tempMovePointer.y;
@@ -189,6 +220,23 @@ class Game {
             }
         }
             return tempAttackPointers;
+    }
+
+    private boolean mayCheckBeAvoided(Piece king){
+        if(isSquareAttacked(king.position, king)){
+            for(int i = 0; i < pieces.size(); i++){ // must be like this, because of possible change in pieces during makeKingSafe()
+                if (pieces.get(i).color == king.color) {
+                    if (pieces.get(i) instanceof King) {
+                        if (!removeAttacked(getMovePointers(pieces.get(i)), pieces.get(i)).isEmpty()) return true;
+                        if (!removeAttacked(getAttackPointers(pieces.get(i)), pieces.get(i)).isEmpty()) return true;
+                    } else {
+                        if (!makeKingSafe(pieces.get(i), getMovePointers(pieces.get(i))).isEmpty()) return true;
+                        if (!makeKingSafe(pieces.get(i), getAttackPointers(pieces.get(i))).isEmpty()) return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     private List<Position> makeKingSafe(Piece movingPiece, List<Position> squares){

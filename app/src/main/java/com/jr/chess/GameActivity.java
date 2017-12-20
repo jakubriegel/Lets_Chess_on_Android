@@ -3,7 +3,6 @@ package com.jr.chess;
 import android.annotation.SuppressLint;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
@@ -16,6 +15,7 @@ public class GameActivity extends AppCompatActivity{
 
     Board board;
     TextView activeColorText;
+    TextView winnerText;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -25,12 +25,13 @@ public class GameActivity extends AppCompatActivity{
         this.goFullscreen();
 
         game = new Game(this);
-        game.startGame();
+        game.start();
 
         board = findViewById(R.id.board_view);
         board.redraw(game.pieces, game.movePointers, game.attackPointers);
 
         activeColorText = findViewById(R.id.active_color_text);
+        winnerText = findViewById(R.id.winner_text);
 
         board.setOnTouchListener(new View.OnTouchListener() {
             @SuppressLint("ClickableViewAccessibility")
@@ -61,6 +62,11 @@ public class GameActivity extends AppCompatActivity{
     private void updateInfo(){
         if(game.activeColor == Const.WHITE) activeColorText.setText("Player: WHITE");
         else activeColorText.setText("Player: BLACK");
+
+        if(game.state == Const.STATE_END){
+            if(game.winner == Const.WHITE) winnerText.setText("Winner: WHITE");
+            else winnerText.setText("Winner: BLACK");
+        }
     }
 
 }

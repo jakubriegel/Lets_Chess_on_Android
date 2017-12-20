@@ -13,6 +13,7 @@ public interface Const {
 
     int STATE_SELECT = 201;
     int STATE_MOVE_ATTACK = 202;
+    int STATE_END = 203;
 
 
     String DEBUG_TAG = "debug_jr";
