@@ -118,6 +118,7 @@ class Game {
                         break;
 
                     case Const.STATE_MOVE_ATTACK:
+                        state = Const.STATE_SELECT; // moved here because of possible change to STATE_END
                         if (Position.areEqual(touchPosition, activePiece.position)) break;
                         for (Position i : movePointers)
                             if (Position.areEqual(i, touchPosition)) {
@@ -133,7 +134,7 @@ class Game {
                                 break;
                             }
 
-                        state = Const.STATE_SELECT;
+
                         movePointers = new ArrayList<>();
                         attackPointers = new ArrayList<>();
                         break;
