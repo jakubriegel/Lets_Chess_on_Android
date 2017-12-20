@@ -22,6 +22,10 @@
         android:id="@+id/winner_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
+    <TextView
+        android:id="@+id/state_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
 
 </LinearLayout>

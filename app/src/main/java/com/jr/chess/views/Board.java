@@ -111,7 +111,9 @@ public class Board extends View {
         return pixelPosition;
     }
 
-
-
+    @Override
+    public boolean performClick() {
+        return super.performClick();
+    }
 }
 
