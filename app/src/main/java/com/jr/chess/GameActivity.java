@@ -16,9 +16,7 @@ public class GameActivity extends AppCompatActivity{
     Board board;
     TextView activeColorText;
     TextView winnerText;
-    TextView stateText;
 
-    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,8 +31,6 @@ public class GameActivity extends AppCompatActivity{
 
         activeColorText = findViewById(R.id.active_color_text);
         winnerText = findViewById(R.id.winner_text);
-        stateText = findViewById(R.id.state_text);
-
 
         board.setOnTouchListener(new View.OnTouchListener() {
             @SuppressLint("ClickableViewAccessibility")
@@ -70,8 +66,6 @@ public class GameActivity extends AppCompatActivity{
             if(game.winner == Const.WHITE) winnerText.setText("Winner: WHITE");
             else winnerText.setText("Winner: BLACK");
         }
-
-        stateText.setText(game.state + "");
     }
 
 }

@@ -118,10 +118,15 @@ class Game {
                         break;
 
                     case Const.STATE_MOVE_ATTACK:
-                        state = Const.STATE_SELECT; // moved here because of possible change to STATE_END
+                        state = Const.STATE_SELECT; // here because of possible change to STATE_END
                         if (Position.areEqual(touchPosition, activePiece.position)) break;
                         for (Position i : movePointers)
                             if (Position.areEqual(i, touchPosition)) {
+                                if(activePiece instanceof King)
+                                    if(Math.abs(activePiece.position.x - touchPosition.x) > 1){
+                                        getCloserRook(touchPosition.x, activePiece.color).moveTo(
+                                                new Position((activePiece.position.x + touchPosition.x)/2, touchPosition.y));
+                                }
                                 activePiece.moveTo(touchPosition);
                                 changeTurn();
                                 break;
@@ -187,6 +192,10 @@ class Game {
                 }
             }
         }
+        if(p instanceof King)
+            for(Piece rook : pieces) if(rook instanceof Rook && rook.color == p.color)
+                tempMovePointers.addAll(castling(p, rook));
+
         return tempMovePointers;
     }
 
@@ -221,6 +230,47 @@ class Game {
             }
         }
             return tempAttackPointers;
+    }
+
+    private List<Position> castling(Piece king, Piece rook){
+        List<Position> castling = new ArrayList<>();
+        if(king.firstMove) if(rook.firstMove) {
+            int step = (int) Math.signum(rook.position.x - king.position.x);
+            boolean possible = true;
+            Position square;
+            for(int x = king.position.x+step; x != rook.position.x; x += step){
+                square = new Position(x, king.position.y);
+                if(pieceOnSquare(square)){
+                    possible = false;
+                    break;
+                } else if(x != rook.position.x+step) if(isSquareAttacked(square, king)){
+                    possible = false;
+                    break;
+                }
+            }
+            if(possible) castling.add(new Position(king.position.x + 2*step, king.position.y));
+        }
+        return castling;
+    }
+
+    private Piece getCloserRook(int x, int color){
+        Piece rook = null;
+        int i;
+        for(i = 0; i < pieces.size(); i++)
+            if(pieces.get(i).color == color) if(pieces.get(i) instanceof Rook){
+            rook = pieces.get(i);
+            break;
+        }
+        for(; i < pieces.size(); i++)
+            if(pieces.get(i).color == color) if(pieces.get(i) instanceof Rook) {
+                assert rook != null;
+                if(Math.abs(x-rook.position.x) > Math.abs(x-pieces.get(i).position.x)){
+                    rook = pieces.get(i);
+                    break;
+                }
+            }
+
+        return rook;
     }
 
     private boolean mayCheckBeAvoided(Piece king){
@@ -293,7 +343,5 @@ class Game {
         movingPiece.position = movingPiecePosition;
         return squares;
     }
-
-
 
 }
