@@ -27,6 +27,7 @@ class Game {
     int activeColor;
     List<Piece> pieces;
     private Piece whiteKing, blackKing;
+    private List<Piece> enPassantInPast;
 
     int winner;
 
@@ -41,6 +42,7 @@ class Game {
         pieces = new ArrayList<>();
         movePointers = new ArrayList<>();
         attackPointers = new ArrayList<>();
+        enPassantInPast = new ArrayList<>();
 
         activeColor = Const.WHITE;
 
@@ -74,6 +76,14 @@ class Game {
     }
 
     private void changeTurn(){
+        for(Piece i : pieces) if(i.enPassant){
+            if(enPassantInPast.contains(i)){
+                i.enPassant = false;
+                enPassantInPast.remove(i);
+            }
+            else enPassantInPast.add(i);
+        }
+
         Piece king;
         // change to BLACK
         if(activeColor == Const.WHITE){
@@ -133,6 +143,12 @@ class Game {
                             }
                         for (Position i : attackPointers)
                             if (Position.areEqual(i, touchPosition)){
+                                if(activePiece instanceof Pawn) if(!pieceOnSquare(i)){
+                                    if(activePiece.color == Const.WHITE)
+                                        pieces.remove(getPieceOn(new Position(touchPosition.x, touchPosition.y-1)));
+                                    else
+                                        pieces.remove(getPieceOn(new Position(touchPosition.x, touchPosition.y+1)));
+                                }
                                 pieces.remove(getPieceOn(touchPosition));
                                 activePiece.moveTo(touchPosition);
                                 changeTurn();
@@ -160,7 +176,7 @@ class Game {
 
     private Piece getPieceOn(Position p){ // TODO: fix null exception
         for(Piece i : pieces) if(Position.areEqual(p, i.position)) return i;
-        return null;
+        return new Pawn(context, 0);
     }
 
     private List<Position> getMovePointers(Piece p){
@@ -229,7 +245,30 @@ class Game {
                 }
             }
         }
-            return tempAttackPointers;
+
+        if(p instanceof Pawn){
+            Position enPosition = new Position(p.position.x+1, p.position.y);
+            Piece enPiece;
+            if(pieceOnSquare(enPosition)){
+                enPiece = getPieceOn(enPosition);
+                if (enPiece instanceof Pawn) if(enPiece.enPassant) {
+                    if(p.color == Const.WHITE) enPosition.y++;
+                    else enPosition.y--;
+                    tempAttackPointers.add(enPosition);
+                }
+            }
+            enPosition = new Position(p.position.x-1, p.position.y);
+            if(pieceOnSquare(enPosition)){
+                enPiece = getPieceOn(enPosition);
+                if (enPiece instanceof Pawn) if(enPiece.enPassant) {
+                    if(p.color == Const.WHITE) enPosition.y++;
+                    else enPosition.y--;
+                    tempAttackPointers.add(enPosition);
+                }
+            }
+        }
+
+        return tempAttackPointers;
     }
 
     private List<Position> castling(Piece king, Piece rook){

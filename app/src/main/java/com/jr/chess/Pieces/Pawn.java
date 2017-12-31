@@ -52,4 +52,6 @@ public class Pawn extends Piece {
         }
         return attacks;
     }
+
+
 }

@@ -23,6 +23,7 @@ public abstract class Piece{
     public Position position;
     public int color;
     public int strokeColor;
+    public boolean enPassant;
 
     public boolean firstMove;
 
@@ -33,6 +34,7 @@ public abstract class Piece{
         alive = true;
         color = _color;
         firstMove = true;
+        enPassant = false;
 
         position = initialPosition();
     }
@@ -42,9 +44,15 @@ public abstract class Piece{
     public abstract List<Position> attackXY();
 
     public void moveTo(Position movePosition) {
+        if(firstMove){
+            firstMove = false;
+            if(Math.abs(movePosition.y-position.y) > 1) enPassant = true;
+        }
+
         position = movePosition;
-        if(firstMove) firstMove = false;
     }
+
+
 
 
 }
