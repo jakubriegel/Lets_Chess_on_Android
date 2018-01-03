@@ -19,6 +19,12 @@ public class Bishop extends Piece {
         strokeColor = ContextCompat.getColor(context, R.color.colorBishop);
     }
 
+    public Bishop(Context c, int _color, Position initPos) {
+        super(c, _color, initPos);
+        type = Const.BISHOP;
+        strokeColor = ContextCompat.getColor(context, R.color.colorBishop);
+    }
+
     @Override
     public Position initialPosition() {
         if(color == Const.WHITE) return new Position(2+(3*whiteBishops++),0);

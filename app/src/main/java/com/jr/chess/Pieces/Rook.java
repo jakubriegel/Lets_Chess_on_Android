@@ -17,6 +17,12 @@ public class Rook extends Piece {
         strokeColor = ContextCompat.getColor(context, R.color.colorRook);
     }
 
+    public Rook(Context c, int _color, Position initPos) {
+        super(c, _color, initPos);
+        type = Const.ROOK;
+        strokeColor = ContextCompat.getColor(context, R.color.colorRook);
+    }
+
     @Override
     public Position initialPosition() {
         if(color == Const.WHITE) return new Position(7*whiteRooks++,0);

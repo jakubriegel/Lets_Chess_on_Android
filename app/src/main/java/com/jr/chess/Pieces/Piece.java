@@ -27,9 +27,9 @@ public abstract class Piece{
 
     public boolean firstMove;
 
-    Context context;
+    Context context; // necessary for processing colors
 
-    public Piece(Context c, int _color){
+    Piece(Context c, int _color){
         context = c;
         alive = true;
         color = _color;
@@ -37,6 +37,16 @@ public abstract class Piece{
         enPassant = false;
 
         position = initialPosition();
+    }
+
+    Piece(Context c, int _color, Position initPos){
+        context = c;
+        alive = true;
+        color = _color;
+        firstMove = true;
+        enPassant = false;
+
+        position = initPos;
     }
 
     public abstract Position initialPosition();

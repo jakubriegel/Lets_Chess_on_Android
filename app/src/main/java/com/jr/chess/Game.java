@@ -13,10 +13,8 @@ import com.jr.chess.Pieces.Queen;
 import com.jr.chess.Pieces.Rook;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 
 class Game {
@@ -32,9 +30,15 @@ class Game {
     int winner;
 
     private Context context;
+    private GameActivity gameActivity;
 
-    Game(Context c){
+    public interface IGameToActivity{
+        void promotion();
+    }
+
+    Game(Context c, GameActivity gA){
         context = c;
+        gameActivity = gA;
     }
 
     void start(){
@@ -59,6 +63,7 @@ class Game {
             if(color == Const.WHITE) whiteKing = pieces.get(pieces.size()-1);
             else blackKing = pieces.get(pieces.size()-1);
         }
+
     }
 
     // case someone won
@@ -138,6 +143,12 @@ class Game {
                                                 new Position((activePiece.position.x + touchPosition.x)/2, touchPosition.y));
                                 }
                                 activePiece.moveTo(touchPosition);
+                                if(activePiece instanceof Pawn){ // check openPromotionFragment possibility
+                                    if(activePiece.color == Const.WHITE)
+                                        if(activePiece.position.y == 7) promotion(activePiece);
+                                        else
+                                        if(activePiece.position.y == 0) promotion(activePiece);
+                                }
                                 changeTurn();
                                 break;
                             }
@@ -151,6 +162,11 @@ class Game {
                                 }
                                 pieces.remove(getPieceOn(touchPosition));
                                 activePiece.moveTo(touchPosition);
+                                if(activePiece instanceof Pawn){ // check openPromotionFragment possibility
+                                    if(activePiece.color == Const.WHITE && activePiece.position.y == 7)
+                                        promotion(activePiece);
+                                    else if(activePiece.position.y == 0) promotion(activePiece);
+                                }
                                 changeTurn();
                                 break;
                             }
@@ -174,9 +190,9 @@ class Game {
         return false;
     }
 
-    private Piece getPieceOn(Position p){ // TODO: fix null exception
+    private Piece getPieceOn(Position p){
         for(Piece i : pieces) if(Position.areEqual(p, i.position)) return i;
-        return new Pawn(context, 0);
+        return new Pawn(context, 0); // protection for null pointer exception
     }
 
     private List<Position> getMovePointers(Piece p){
@@ -381,6 +397,38 @@ class Game {
         }
         movingPiece.position = movingPiecePosition;
         return squares;
+    }
+
+    private void promotion(Piece promotedPawn){
+        Log.v(Const.DEBUG_TAG, "game, openPromotionFragment - start");
+        gameActivity.openPromotionFragment(promotedPawn.color, promotedPawn.position);
+        //pieces.remove(promotedPawn);
+        Log.v(Const.DEBUG_TAG, "game, openPromotionFragment - returning");
+    }
+
+    void promotionAddPiece(int type){
+        switch (type){
+            case Const.KNIGHT:
+                pieces.add(new Knight(context, activePiece.color, activePiece.position));
+                break;
+
+            case Const.BISHOP:
+                pieces.add(new Bishop(context, activePiece.color, activePiece.position));
+                break;
+
+            case Const.ROOK:
+                pieces.add(new Rook(context, activePiece.color, activePiece.position));
+                break;
+
+            case Const.QUEEN:
+                pieces.add(new Queen(context, activePiece.color, activePiece.position));
+                break;
+            default:
+                Log.v(Const.DEBUG_TAG, "game, openPromotionFragment - error int");
+        }
+
+        pieces.remove(activePiece);
+        gameActivity.redrawBoard();
     }
 
 }

@@ -3,27 +3,38 @@ package com.jr.chess;
 import android.annotation.SuppressLint;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.jr.chess.views.Board;
 
-public class GameActivity extends AppCompatActivity{
+public class GameActivity extends AppCompatActivity implements PromotionFragment.IPromotionFragment{
 
     Game game;
 
     Board board;
     TextView activeColorText;
     TextView winnerText;
+    FrameLayout fragmentFrame;
+
+    PromotionFragment promotionFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // setting up the activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
         this.goFullscreen();
 
-        game = new Game(this);
+        fragmentFrame = findViewById(R.id.fragment_frame);
+        fragmentFrame.bringToFront();
+        fragmentFrame.setVisibility(View.GONE);
+
+        // setting up the game
+        game = new Game(this, this);
         game.start();
 
         board = findViewById(R.id.board_view);
@@ -39,12 +50,16 @@ public class GameActivity extends AppCompatActivity{
                 Position p = board.getSquare(new Position((int) event.getX(), (int) event.getY()));
                 game.processTouch(event, p);
 
-                board.redraw(game.pieces, game.movePointers, game.attackPointers);
+                redrawBoard();
                 updateInfo();
 
                 return true;
             }
         });
+
+        promotionFragment = new PromotionFragment();
+        getSupportFragmentManager().beginTransaction().add(R.id.fragment_frame, promotionFragment).commit();
+
     }
 
     private void goFullscreen(){
@@ -58,7 +73,11 @@ public class GameActivity extends AppCompatActivity{
         getWindow().getDecorView().setSystemUiVisibility(newUiOptions);
     }
 
-    private void updateInfo(){
+    void redrawBoard(){
+        board.redraw(game.pieces, game.movePointers, game.attackPointers);
+    }
+
+    void updateInfo(){
         if(game.activeColor == Const.WHITE) activeColorText.setText("Player: WHITE");
         else activeColorText.setText("Player: BLACK");
 
@@ -66,6 +85,19 @@ public class GameActivity extends AppCompatActivity{
             if(game.winner == Const.WHITE) winnerText.setText("Winner: WHITE");
             else winnerText.setText("Winner: BLACK");
         }
+    }
+
+    public void openPromotionFragment(int color, Position position){
+        fragmentFrame.bringToFront();
+        fragmentFrame.setVisibility(View.VISIBLE);
+        promotionFragment = (PromotionFragment)getSupportFragmentManager().findFragmentById(R.id.fragment_frame);
+
+    }
+
+    public void closePromotionFragment(int type){
+        game.promotionAddPiece(type);
+        fragmentFrame.setVisibility(View.GONE);
+        Log.v(Const.DEBUG_TAG, "gameActivity, closePromotionFragment - done");
     }
 
 }

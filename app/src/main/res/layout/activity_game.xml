@@ -1,30 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.jr.chess.GameActivity"
     android:orientation="vertical"
-    android:gravity="center"
-    >
+    android:gravity="center">
 
-    <com.jr.chess.views.Board
-        android:id="@+id/board_view"
+    <FrameLayout
+        android:id="@+id/fragment_frame"
+        android:layout_width="300dp"
+        android:layout_height="150dp"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        tools:background="@color/colorKing" />
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:background="@drawable/board" />
-    <TextView
-        android:id="@+id/active_color_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-    <TextView
-        android:id="@+id/winner_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-    <TextView
-        android:id="@+id/state_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:clipChildren="false">
 
+        <com.jr.chess.views.Board
+            android:id="@+id/board_view"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:background="@drawable/board"
+            tools:layout_width="100dp"
+            tools:layout_height="100dp"/>
+        <TextView
+            android:id="@+id/active_color_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="active_color_text"/>
+        <TextView
+            android:id="@+id/winner_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="winner_text"/>
+        <TextView
+            android:id="@+id/state_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="state_text"/>
 
-</LinearLayout>
+    </LinearLayout>
+
+</RelativeLayout>

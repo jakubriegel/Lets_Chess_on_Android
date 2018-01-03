@@ -10,13 +10,15 @@ import com.jr.chess.R;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by jakub on 03-Dec-17.
- */
-
 public class Queen extends Piece {
     public Queen(Context c, int _color) {
         super(c, _color);
+        type = Const.QUEEN;
+        strokeColor = ContextCompat.getColor(context, R.color.colorQueen);
+    }
+
+    public Queen(Context c, int _color, Position initPos) {
+        super(c, _color, initPos);
         type = Const.QUEEN;
         strokeColor = ContextCompat.getColor(context, R.color.colorQueen);
     }
