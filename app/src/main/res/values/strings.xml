@@ -1,9 +1,20 @@
 <resources>
     <string name="app_name">Chess</string>
 
-    <string name="title_activity_game">GameActivity</string>
+    <!--pieces-->
+    <string name="pawn">pawn</string>
+    <string name="bishop">bishop</string>
+    <string name="knight">knight</string>
+    <string name="rook">rook</string>
+    <string name="queen">queen</string>
+    <string name="king">king</string>
 
+    <!--main activity-->
     <string name="game_start_button">Start Game</string>
+    <string name="settings_button">Settings</string>
+    <string name="about_button">About</string>
 
-    <string name="hello_blank_fragment">promotion fragment</string>
+    <!--game activity-->
+    <string name="title_activity_game">GameActivity</string>
+    <string name="promotion_description">Choose the piece you want to promote to</string>
 </resources>

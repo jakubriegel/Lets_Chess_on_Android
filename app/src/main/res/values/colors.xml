@@ -1,17 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+<color name="colorPrimary">#303F9F</color>
+<color name="colorPrimaryGold">#FFC107</color>
+<color name="colorAccent">#455A64</color>
+<color name="colorTransAccent">#90455A64</color>
 
-    <color name="black_overlay">#66000000</color>
+<color name="black_overlay">#66000000</color>
 
-    <color name="colorPawn">#3949AB</color>
-    <color name="colorBishop">#43A047</color>
-    <color name="colorKnight">#E53935</color>
-    <color name="colorRook">#6D4C41</color>
-    <color name="colorQueen">#8E24AA</color>
-    <color name="colorKing">#FDD835</color>
+<color name="colorBlackPlayer">#263238</color>
+<color name="colorWhitePlayer">#ECEFF1</color>
+
+<color name="colorPawn">#1E88E5</color>
+<color name="colorBishop">#43A047</color>
+<color name="colorKnight">#E53935</color>
+<color name="colorRook">#6D4C41</color>
+<color name="colorQueen">#8E24AA</color>
+<color name="colorKing">#FBC02D</color>
 
 
 </resources>

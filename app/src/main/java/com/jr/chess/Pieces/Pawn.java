@@ -2,7 +2,7 @@ package com.jr.chess.Pieces;
 
 import android.content.Context;
 import android.support.v4.content.ContextCompat;
-
+import android.graphics.drawable.Drawable;
 import com.jr.chess.Const;
 import com.jr.chess.Position;
 import com.jr.chess.R;
@@ -16,6 +16,9 @@ public class Pawn extends Piece {
         super(c, _color);
         type = Const.PAWN;
         strokeColor = ContextCompat.getColor(context, R.color.colorPawn);
+        if (color == Const.WHITE) image = context.getResources().getDrawable(R.drawable.white_pawn);
+        else image = context.getResources().getDrawable(R.drawable.black_pawn);
+
     }
 
     @Override

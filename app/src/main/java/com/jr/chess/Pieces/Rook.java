@@ -15,12 +15,16 @@ public class Rook extends Piece {
         super(c, _color);
         type = Const.ROOK;
         strokeColor = ContextCompat.getColor(context, R.color.colorRook);
+        if (color == Const.WHITE) image = context.getResources().getDrawable(R.drawable.white_rook);
+        else image = context.getResources().getDrawable(R.drawable.black_rook);
     }
 
     public Rook(Context c, int _color, Position initPos) {
         super(c, _color, initPos);
         type = Const.ROOK;
         strokeColor = ContextCompat.getColor(context, R.color.colorRook);
+        if (color == Const.WHITE) image = context.getResources().getDrawable(R.drawable.white_rook);
+        else image = context.getResources().getDrawable(R.drawable.black_rook);
     }
 
     @Override

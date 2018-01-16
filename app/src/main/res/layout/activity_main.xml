@@ -1,15 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.jr.chess.MainActivity">
+    tools:context="com.jr.chess.MainActivity"
+    android:orientation="vertical"
+    android:gravity="center">
+
+    <ImageView
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_marginBottom="15dp"
+        android:src="@drawable/chess_logo"/>
+
+    <TextView
+        android:layout_width="250dp"
+        android:layout_height="70dp"
+        android:text="@string/app_name"
+        android:textAlignment="gravity"
+        android:gravity="center"
+        android:textSize="50sp"
+        android:textAllCaps="true"/>
 
     <Button
+        style="@style/mainButtonStyle"
         android:id="@+id/start_game_button"
-        android:text="@string/game_start_button"
-        android:layout_width="match_parent"
-        android:layout_height="50dp" />
+        android:text="@string/game_start_button"/>
 
-</android.support.constraint.ConstraintLayout>
+    <Button
+        style="@style/mainButtonStyle"
+        android:id="@+id/settings_button"
+        android:text="@string/settings_button"/>
+
+    <Button
+        style="@style/mainButtonStyle"
+        android:id="@+id/about_button"
+        android:text="@string/about_button"/>
+
+</LinearLayout>

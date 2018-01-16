@@ -5,7 +5,9 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -28,11 +30,21 @@ public class Board extends View {
     private List<Position> movePointersToDraw;
     private List<Position> attackPointersToDraw;
 
+    private int displayMode;
+    private int oneTileWidth;
+
     public Board(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
 
         piecesToDraw = new ArrayList<>();
         movePointersToDraw = new ArrayList<>();
+
+        fillPaint = new Paint();
+        strokePaint = new Paint();
+        fillPaint.setStyle(Paint.Style.FILL);
+        strokePaint.setStyle(Paint.Style.STROKE);
+
+        oneTileWidth = 0;
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -54,43 +66,88 @@ public class Board extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        Position temp;
+        if(oneTileWidth == 0) oneTileWidth = this.getWidth() / 8;
 
-        fillPaint.setStyle(Paint.Style.FILL);
-        strokePaint.setStyle(Paint.Style.STROKE);
-
-        strokePaint.setStrokeWidth(14);
-        for(Piece i : piecesToDraw) if(i.alive){
-            if(i.color == Const.WHITE) fillPaint.setColor(Color.WHITE);
-            else fillPaint.setColor(Color.BLACK);
-
-            temp = toPixels(i.position);
-            strokePaint.setColor(i.strokeColor);
-
-            canvas.drawCircle(temp.x, temp.y, 46, fillPaint);
-            canvas.drawCircle(temp.x, temp.y, 53, strokePaint);
+        switch (displayMode){
+            case Const.CLASSIC_MODE:
+                drawClassic(canvas);
+                break;
+            case Const.MODERN_MODE:
+                drawModern(canvas);
+                break;
         }
 
+        Position temp;
         strokePaint.setStrokeWidth(10);
         strokePaint.setColor(Color.GREEN);
         for(Position i : movePointersToDraw){
             temp = toPixels(i);
+            temp.x += oneTileWidth / 2;
+            temp.y += oneTileWidth / 2;
+
             canvas.drawCircle(temp.x, temp.y, 30, strokePaint);
         }
         strokePaint.setColor(Color.RED);
         for(Position i : attackPointersToDraw){
             temp = toPixels(i);
+            temp.x += oneTileWidth / 2;
+            temp.y += oneTileWidth / 2;
             canvas.drawCircle(temp.x, temp.y, 30, strokePaint);
         }
 
     }
 
-    public void redraw(List<Piece> pieces, List<Position> movePointers, List<Position> attackPointers){
+    public void redraw(List<Piece> pieces, List<Position> movePointers, List<Position> attackPointers, int mode){
         piecesToDraw = pieces;
         movePointersToDraw = movePointers;
         attackPointersToDraw = attackPointers;
+        displayMode = mode;
 
         invalidate();
+    }
+
+    private void drawClassic(Canvas canvas){
+        Position temp;
+        Drawable pieceImage;
+
+        for(Piece i : piecesToDraw){
+            pieceImage = i.image;
+            temp = toPixels(i.position);
+            if(i.color == Const.BLACK){
+                canvas.save();
+                canvas.rotate(180, getWidth()/2, getHeight()/2);
+                temp.y = getWidth() - temp.y - oneTileWidth;
+                temp.x = getWidth() - temp.x - oneTileWidth;
+                pieceImage.setBounds(temp.x + oneTileWidth / 10, temp.y + oneTileWidth / 10,
+                        temp.x + oneTileWidth - oneTileWidth / 10, temp.y + oneTileWidth - oneTileWidth / 10);
+                pieceImage.draw(canvas);
+                canvas.restore();
+            }
+            else {
+                pieceImage.setBounds(temp.x + oneTileWidth / 10, temp.y + oneTileWidth / 10,
+                        temp.x + oneTileWidth - oneTileWidth / 10, temp.y + oneTileWidth - oneTileWidth / 10);
+                pieceImage.draw(canvas);
+            }
+
+        }
+    }
+
+    public void drawModern(Canvas canvas){
+        Position temp;
+
+        strokePaint.setStrokeWidth(15);
+        for(Piece i : piecesToDraw){
+            if(i.color == Const.WHITE) fillPaint.setColor(ContextCompat.getColor(getContext(), R.color.colorWhitePlayer));
+            else fillPaint.setColor(ContextCompat.getColor(getContext(), R.color.colorBlackPlayer));
+
+            temp = toPixels(i.position);
+            temp.x += oneTileWidth / 2;
+            temp.y += oneTileWidth / 2;
+            strokePaint.setColor(i.strokeColor);
+
+            canvas.drawCircle(temp.x, temp.y, 46, fillPaint);
+            canvas.drawCircle(temp.x, temp.y, 53, strokePaint);
+        }
     }
 
     public Position getSquare(Position p){
@@ -104,9 +161,8 @@ public class Board extends View {
 
     private Position toPixels(Position p){
         Position pixelPosition = new Position(p.x, p.y); // sidestep to avoid reference
-        int oneWidth = this.getWidth() / 8;
-        pixelPosition.x = (pixelPosition.x * oneWidth) + (oneWidth / 2);
-        pixelPosition.y = ((7-pixelPosition.y)*oneWidth) + (oneWidth / 2);
+        pixelPosition.x = pixelPosition.x * oneTileWidth;
+        pixelPosition.y = (7-pixelPosition.y) * oneTileWidth;
 
         return pixelPosition;
     }
@@ -115,5 +171,7 @@ public class Board extends View {
     public boolean performClick() {
         return super.performClick();
     }
+
+
 }
 

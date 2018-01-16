@@ -14,6 +14,10 @@ public interface Const {
     int STATE_SELECT = 201;
     int STATE_MOVE_ATTACK = 202;
     int STATE_END = 203;
+    int STATE_PROMOTION = 204;
+
+    int CLASSIC_MODE = 301;
+    int MODERN_MODE = 302;
 
 
     String DEBUG_TAG = "debug_jr";

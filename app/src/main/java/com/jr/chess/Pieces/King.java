@@ -16,6 +16,8 @@ public class King extends Piece {
         super(c, _color);
         type = Const.KING;
         strokeColor = ContextCompat.getColor(context, R.color.colorKing);
+        if (color == Const.WHITE) image = context.getResources().getDrawable(R.drawable.white_king);
+        else image = context.getResources().getDrawable(R.drawable.black_king);
     }
 
     @Override

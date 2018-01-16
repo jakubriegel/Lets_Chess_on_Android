@@ -24,6 +24,7 @@ class Game {
     private Piece activePiece;
     int activeColor;
     List<Piece> pieces;
+    public List<Piece> deletedPieces;
     private Piece whiteKing, blackKing;
     private List<Piece> enPassantInPast;
 
@@ -44,6 +45,7 @@ class Game {
     void start(){
         state = Const.STATE_SELECT;
         pieces = new ArrayList<>();
+        deletedPieces = new ArrayList<>();
         movePointers = new ArrayList<>();
         attackPointers = new ArrayList<>();
         enPassantInPast = new ArrayList<>();
@@ -51,7 +53,7 @@ class Game {
         activeColor = Const.WHITE;
 
         for (int color = Const.WHITE; color <= Const.BLACK; color++){
-            for(int i = 0; i < 16; i++) pieces.add(new Pawn(context, color));
+            for(int i = 0; i < 8; i++) pieces.add(new Pawn(context, color));
             pieces.add(new Bishop(context, color));
             pieces.add(new Bishop(context, color));
             pieces.add(new Knight(context, color));
@@ -143,11 +145,10 @@ class Game {
                                                 new Position((activePiece.position.x + touchPosition.x)/2, touchPosition.y));
                                 }
                                 activePiece.moveTo(touchPosition);
-                                if(activePiece instanceof Pawn){ // check openPromotionFragment possibility
-                                    if(activePiece.color == Const.WHITE)
-                                        if(activePiece.position.y == 7) promotion(activePiece);
-                                        else
-                                        if(activePiece.position.y == 0) promotion(activePiece);
+                                if(activePiece instanceof Pawn){ // check promotion possibility
+                                    if(activePiece.color == Const.WHITE
+                                            && activePiece.position.y == 7) promotion(activePiece);
+                                    else if(activePiece.position.y == 0) promotion(activePiece);
                                 }
                                 changeTurn();
                                 break;
@@ -160,7 +161,10 @@ class Game {
                                     else
                                         pieces.remove(getPieceOn(new Position(touchPosition.x, touchPosition.y+1)));
                                 }
-                                pieces.remove(getPieceOn(touchPosition));
+                                if(pieceOnSquare(touchPosition)){
+                                    deletedPieces.add(getPieceOn(touchPosition));
+                                    pieces.remove(getPieceOn(touchPosition));
+                                }
                                 activePiece.moveTo(touchPosition);
                                 if(activePiece instanceof Pawn){ // check openPromotionFragment possibility
                                     if(activePiece.color == Const.WHITE && activePiece.position.y == 7)
@@ -177,7 +181,7 @@ class Game {
                         break;
 
                     case Const.STATE_END:
-                        Log.v(Const.DEBUG_TAG, "processTouch - state_end, doing nothing");
+                    case Const.STATE_PROMOTION:
                         break;
                 }
         }
@@ -400,10 +404,8 @@ class Game {
     }
 
     private void promotion(Piece promotedPawn){
-        Log.v(Const.DEBUG_TAG, "game, openPromotionFragment - start");
-        gameActivity.openPromotionFragment(promotedPawn.color, promotedPawn.position);
-        //pieces.remove(promotedPawn);
-        Log.v(Const.DEBUG_TAG, "game, openPromotionFragment - returning");
+        gameActivity.openPromotionFragment(promotedPawn.color);
+        state = Const.STATE_PROMOTION;
     }
 
     void promotionAddPiece(int type){
@@ -428,7 +430,7 @@ class Game {
         }
 
         pieces.remove(activePiece);
-        gameActivity.redrawBoard();
+        gameActivity.redraw();
     }
 
 }

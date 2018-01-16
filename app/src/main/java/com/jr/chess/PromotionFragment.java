@@ -25,7 +25,6 @@ public class PromotionFragment extends Fragment {
     Button queenButton;
 
     private int color;
-    private Position position;
 
     Boolean clicked;
 
@@ -42,12 +41,31 @@ public class PromotionFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_promotion, container, false);
 
+        Bundle activeColor = getArguments();
+        color = activeColor.getInt("color");
+
         knightButton = view.findViewById(R.id.promotion_knight_button);
         bishopButton = view.findViewById(R.id.promotion_bishop_button);
         rookButton = view.findViewById(R.id.promotion_rook_button);
         queenButton = view.findViewById(R.id.promotion_queen_button);
 
         iPromotionFragment = (IPromotionFragment) getActivity();
+
+        switch (color){
+            case Const.WHITE:
+                knightButton.setBackgroundResource(R.drawable.white_knight);
+                bishopButton.setBackgroundResource(R.drawable.white_bishop);
+                rookButton.setBackgroundResource(R.drawable.white_rook);
+                queenButton.setBackgroundResource(R.drawable.white_queen);
+
+                break;
+            case Const.BLACK:
+                knightButton.setBackgroundResource(R.drawable.black_knight);
+                bishopButton.setBackgroundResource(R.drawable.black_bishop);
+                rookButton.setBackgroundResource(R.drawable.black_rook);
+                queenButton.setBackgroundResource(R.drawable.black_queen);
+                break;
+        }
 
         knightButton.setOnClickListener(new View.OnClickListener() {
             @Override

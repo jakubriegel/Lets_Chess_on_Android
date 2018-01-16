@@ -1,6 +1,7 @@
 package com.jr.chess.Pieces;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 
 import com.jr.chess.Const;
 import com.jr.chess.Position;
@@ -23,6 +24,7 @@ public abstract class Piece{
     public Position position;
     public int color;
     public int strokeColor;
+    public Drawable image;
     public boolean enPassant;
 
     public boolean firstMove;

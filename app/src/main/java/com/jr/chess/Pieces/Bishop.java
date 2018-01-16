@@ -17,12 +17,16 @@ public class Bishop extends Piece {
         super(c, _color);
         type = Const.BISHOP;
         strokeColor = ContextCompat.getColor(context, R.color.colorBishop);
+        if (color == Const.WHITE) image = context.getResources().getDrawable(R.drawable.white_bishop);
+        else image = context.getResources().getDrawable(R.drawable.black_bishop);
     }
 
     public Bishop(Context c, int _color, Position initPos) {
         super(c, _color, initPos);
         type = Const.BISHOP;
         strokeColor = ContextCompat.getColor(context, R.color.colorBishop);
+        if (color == Const.WHITE) image = context.getResources().getDrawable(R.drawable.white_bishop);
+        else image = context.getResources().getDrawable(R.drawable.black_bishop);
     }
 
     @Override
