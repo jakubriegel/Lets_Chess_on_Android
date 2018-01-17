@@ -10,10 +10,13 @@
 <color name="colorBlackPlayer">#263238</color>
 <color name="colorWhitePlayer">#ECEFF1</color>
 
+<color name="colorBlackTile">#6D4C41</color>
+<color name="colorWhiteTile">#BCAAA4</color>
+
 <color name="colorPawn">#1E88E5</color>
 <color name="colorBishop">#43A047</color>
 <color name="colorKnight">#E53935</color>
-<color name="colorRook">#6D4C41</color>
+<color name="colorRook">#4E342E</color>
 <color name="colorQueen">#8E24AA</color>
 <color name="colorKing">#FBC02D</color>
 

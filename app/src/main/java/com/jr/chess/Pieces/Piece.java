@@ -3,7 +3,6 @@ package com.jr.chess.Pieces;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 
-import com.jr.chess.Const;
 import com.jr.chess.Position;
 
 import java.util.List;
@@ -19,21 +18,18 @@ public abstract class Piece{
     static int whiteRooks = 0;
     static int blackRooks = 0;
 
-    public int type;
-    public boolean alive;
     public Position position;
-    public int color;
+    public final int color;
     public int strokeColor;
     public Drawable image;
     public boolean enPassant;
 
     public boolean firstMove;
 
-    Context context; // necessary for processing colors
+    final Context context; // necessary for processing colors
 
     Piece(Context c, int _color){
         context = c;
-        alive = true;
         color = _color;
         firstMove = true;
         enPassant = false;
@@ -43,7 +39,6 @@ public abstract class Piece{
 
     Piece(Context c, int _color, Position initPos){
         context = c;
-        alive = true;
         color = _color;
         firstMove = true;
         enPassant = false;
@@ -51,7 +46,7 @@ public abstract class Piece{
         position = initPos;
     }
 
-    public abstract Position initialPosition();
+    protected abstract Position initialPosition();
     public abstract List<Position> moveXY();
     public abstract List<Position> attackXY();
 

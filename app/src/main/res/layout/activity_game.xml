@@ -9,11 +9,9 @@
     android:gravity="center">
 
     <FrameLayout
-        android:id="@+id/fragment_frame"
+        android:id="@+id/promotion_fragment_frame"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true" />
+        android:layout_height="match_parent" />
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
@@ -35,7 +33,7 @@
                 tools:text="active_color_text"/>
         </LinearLayout>
 
-        <com.jr.chess.views.Board
+        <com.jr.chess.Views.Board
             android:id="@+id/board_view"
             android:layout_width="100dp"
             android:layout_height="100dp"
@@ -61,7 +59,7 @@
         </LinearLayout>
     </LinearLayout>
 
-    <com.jr.chess.views.BoardGrid
+    <com.jr.chess.Views.BoardGrid
         android:id="@+id/board_grid"
         android:layout_width="100dp"
         android:layout_height="100dp"

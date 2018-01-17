@@ -14,6 +14,11 @@
     <string name="settings_button">Settings</string>
     <string name="about_button">About</string>
 
+    <!--settings-->
+    <string name="settings_header">Settings</string>
+
+    <string name="utility_close">go back to main menu</string>
+
     <!--game activity-->
     <string name="title_activity_game">GameActivity</string>
     <string name="promotion_description">Choose the piece you want to promote to</string>

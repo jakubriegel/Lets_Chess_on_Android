@@ -1,41 +1,35 @@
 package com.jr.chess;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
-import com.jr.chess.views.Board;
+import com.jr.chess.Views.Board;
 
 public class GameActivity extends AppCompatActivity implements PromotionFragment.IPromotionFragment{
 
-    Game game;
+    private Game game;
 
-    Board board;
-    TextView activeColorText;
-    TextView winnerText;
-    FrameLayout fragmentFrame;
+    private Board board;
+    private TextView activeColorText;
+    private TextView winnerText;
+    private FrameLayout fragmentFrame;
 
-    int displayMode;
+    private int displayMode;
 
-    PromotionFragment promotionFragment;
-
-    Context self;
+    private PromotionFragment promotionFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         // setting up the activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
-        self = this;
 
-        fragmentFrame = findViewById(R.id.fragment_frame);
+        fragmentFrame = findViewById(R.id.promotion_fragment_frame);
         fragmentFrame.bringToFront();
         fragmentFrame.setVisibility(View.GONE);
 
@@ -70,7 +64,7 @@ public class GameActivity extends AppCompatActivity implements PromotionFragment
         board.redraw(game.pieces, game.movePointers, game.attackPointers, displayMode);
     }
 
-    void updateInfo(){
+    private void updateInfo(){
         if(game.activeColor == Const.WHITE) activeColorText.setText("Player: WHITE");
         else activeColorText.setText("Player: BLACK");
 
@@ -89,7 +83,7 @@ public class GameActivity extends AppCompatActivity implements PromotionFragment
         Bundle activeColor = new Bundle();
         activeColor.putInt("color", color);
         promotionFragment.setArguments(activeColor);
-        getSupportFragmentManager().beginTransaction().add(R.id.fragment_frame, promotionFragment).commit();
+        getSupportFragmentManager().beginTransaction().add(R.id.promotion_fragment_frame, promotionFragment).commit();
 
     }
 

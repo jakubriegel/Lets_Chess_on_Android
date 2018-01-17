@@ -1,4 +1,4 @@
-package com.jr.chess.views;
+package com.jr.chess.Views;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -9,10 +9,8 @@ import android.graphics.drawable.Drawable;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-
 import com.jr.chess.Const;
 import com.jr.chess.Pieces.Piece;
 import com.jr.chess.Position;
@@ -23,10 +21,10 @@ import java.util.List;
 
 
 public class Board extends View {
-    Paint fillPaint = new Paint();
-    Paint strokePaint = new Paint();
+    private Paint fillPaint;
+    private Paint strokePaint;
 
-    List<Piece> piecesToDraw;
+    private List<Piece> piecesToDraw;
     private List<Position> movePointersToDraw;
     private List<Position> attackPointersToDraw;
 
@@ -132,7 +130,7 @@ public class Board extends View {
         }
     }
 
-    public void drawModern(Canvas canvas){
+    private void drawModern(Canvas canvas){
         Position temp;
 
         strokePaint.setStrokeWidth(15);

@@ -24,18 +24,14 @@ class Game {
     private Piece activePiece;
     int activeColor;
     List<Piece> pieces;
-    public List<Piece> deletedPieces;
+    private List<Piece> deletedPieces;
     private Piece whiteKing, blackKing;
     private List<Piece> enPassantInPast;
 
     int winner;
 
-    private Context context;
-    private GameActivity gameActivity;
-
-    public interface IGameToActivity{
-        void promotion();
-    }
+    private final Context context;
+    private final GameActivity gameActivity;
 
     Game(Context c, GameActivity gA){
         context = c;
@@ -105,8 +101,8 @@ class Game {
 
         if(isSquareAttacked(king.position, king)){
             if(mayCheckBeAvoided(king)) return;
-            Log.v(Const.DEBUG_TAG, "change turn - someone won");
-            if(activeColor == Const.WHITE) end(Const.BLACK);
+
+            else if(activeColor == Const.WHITE) end(Const.BLACK);
             else end(Const.WHITE);
         }
     }
@@ -334,7 +330,7 @@ class Game {
 
     private boolean mayCheckBeAvoided(Piece king){
         if(isSquareAttacked(king.position, king)){
-            for(int i = 0; i < pieces.size(); i++){ // must be like this, because of possible change in pieces during makeKingSafe()
+            for(int i = 0; i < pieces.size(); i++){ // must be like this, because of possible change in pieces order during makeKingSafe()
                 if (pieces.get(i).color == king.color) {
                     if (pieces.get(i) instanceof King) {
                         if (!removeAttacked(getMovePointers(pieces.get(i)), pieces.get(i)).isEmpty()) return true;
@@ -345,8 +341,9 @@ class Game {
                     }
                 }
             }
+            return false;
         }
-        return false;
+        return true;
     }
 
     private List<Position> makeKingSafe(Piece movingPiece, List<Position> squares){
@@ -382,7 +379,7 @@ class Game {
     }
 
     // overloaded for making King safe when other pieces move
-    private List<Position> removeAttacked(List<Position> squares, Piece protectedPiece, Piece movingPiece){
+    private List<Position> removeAttacked(List<Position> squares, Piece protectedPiece/*king*/, Piece movingPiece){
         ListIterator<Position> squaresIterator = squares.listIterator();
         Position movingPiecePosition = movingPiece.position, tempSquare;
         Piece deletedPiece = null;

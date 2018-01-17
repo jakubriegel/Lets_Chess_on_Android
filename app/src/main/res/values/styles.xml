@@ -31,4 +31,23 @@
         
     </style>
 
+    <style name="utilityFragmentStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+
+        <item name="android:background">@drawable/utility_background</item>
+
+    </style>
+
+    <style name="utilityCloseButton">
+        <item name="android:tag">close_button</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_alignParentBottom">true</item>
+
+        <item name="android:background">@null</item>
+
+        <item name="android:text">@string/utility_close</item>
+    </style>
+
 </resources>

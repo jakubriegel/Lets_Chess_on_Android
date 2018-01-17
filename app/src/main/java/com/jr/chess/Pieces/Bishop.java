@@ -1,9 +1,7 @@
 package com.jr.chess.Pieces;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 
 import com.jr.chess.Const;
 import com.jr.chess.Position;
@@ -15,7 +13,6 @@ import java.util.List;
 public class Bishop extends Piece {
     public Bishop(Context c, int _color) {
         super(c, _color);
-        type = Const.BISHOP;
         strokeColor = ContextCompat.getColor(context, R.color.colorBishop);
         if (color == Const.WHITE) image = context.getResources().getDrawable(R.drawable.white_bishop);
         else image = context.getResources().getDrawable(R.drawable.black_bishop);
@@ -23,7 +20,6 @@ public class Bishop extends Piece {
 
     public Bishop(Context c, int _color, Position initPos) {
         super(c, _color, initPos);
-        type = Const.BISHOP;
         strokeColor = ContextCompat.getColor(context, R.color.colorBishop);
         if (color == Const.WHITE) image = context.getResources().getDrawable(R.drawable.white_bishop);
         else image = context.getResources().getDrawable(R.drawable.black_bishop);

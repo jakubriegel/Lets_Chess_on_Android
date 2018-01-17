@@ -13,7 +13,6 @@ import java.util.List;
 public class Queen extends Piece {
     public Queen(Context c, int _color) {
         super(c, _color);
-        type = Const.QUEEN;
         strokeColor = ContextCompat.getColor(context, R.color.colorQueen);
         if (color == Const.WHITE) image = context.getResources().getDrawable(R.drawable.white_queen);
         else image = context.getResources().getDrawable(R.drawable.black_queen);
@@ -21,7 +20,6 @@ public class Queen extends Piece {
 
     public Queen(Context c, int _color, Position initPos) {
         super(c, _color, initPos);
-        type = Const.QUEEN;
         strokeColor = ContextCompat.getColor(context, R.color.colorQueen);
         if (color == Const.WHITE) image = context.getResources().getDrawable(R.drawable.white_queen);
         else image = context.getResources().getDrawable(R.drawable.black_queen);
