@@ -1,21 +1,18 @@
 package com.jr.chess.UtilityFragments;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
 import android.os.Bundle;
-import android.preference.PreferenceFragment;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.jr.chess.R;
 
-
-
-public class SettingsFragment extends UtilityFragment {
+public class AboutFragment extends UtilityFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -23,19 +20,15 @@ public class SettingsFragment extends UtilityFragment {
 
         assert view != null;
         TextView header = view.findViewById(R.id.utility_header);
-        header.setText(R.string.settings_header);
+        header.setText(R.string.about_header);
 
-        getChildFragmentManager().beginTransaction().add(R.id.utility_frame, new PreferencesFragment()).commit();
+        LayoutInflater layoutInflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        assert layoutInflater != null;
+        @SuppressLint("InflateParams")
+        View content = layoutInflater.inflate(R.layout.content_about, null);
+        FrameLayout contentFrame = view.findViewById(R.id.utility_frame);
+        contentFrame.addView(content);
 
         return view;
-    }
-
-
-    public static class PreferencesFragment extends PreferenceFragment {
-        @Override
-        public void onCreate(@Nullable Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            addPreferencesFromResource(R.xml.preferences);
-        }
     }
 }

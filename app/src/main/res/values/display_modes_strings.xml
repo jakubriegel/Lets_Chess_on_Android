@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="display_modes_strings">
+        <item>classic</item>
+        <item>modern</item>
+    </string-array>
+</resources>

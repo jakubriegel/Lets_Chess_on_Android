@@ -7,8 +7,9 @@
     <FrameLayout
         android:id="@+id/utility_fragment_frame"
         android:layout_width="match_parent"
-        android:layout_height="450dp"
-        android:layout_alignParentBottom="true"/>
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        android:background="@color/colorTransAccent"/>
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
@@ -21,6 +22,7 @@
     <ImageView
         android:layout_width="150dp"
         android:layout_height="150dp"
+        android:contentDescription="@string/app_name"
         android:layout_marginBottom="15dp"
         android:src="@drawable/chess_logo"/>
 

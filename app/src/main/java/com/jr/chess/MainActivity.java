@@ -7,17 +7,22 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
 
+import com.jr.chess.UtilityFragments.AboutFragment;
 import com.jr.chess.UtilityFragments.SettingsFragment;
+import com.jr.chess.UtilityFragments.UtilityFragment;
 
-public class MainActivity extends AppCompatActivity implements SettingsFragment.ISettingsFragment{
+public class MainActivity extends AppCompatActivity implements UtilityFragment.IUtilityFragment{
+
+    FrameLayout utilityFrame;
+    UtilityFragment utilityFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        FrameLayout utilityFame = findViewById(R.id.utility_fragment_frame);
-        utilityFame.bringToFront();
+        utilityFrame = findViewById(R.id.utility_fragment_frame);
+        utilityFrame.bringToFront();
 
         Button startGameButton = findViewById(R.id.start_game_button);
         startGameButton.setOnClickListener(new View.OnClickListener() {
@@ -32,15 +37,29 @@ public class MainActivity extends AppCompatActivity implements SettingsFragment.
         settingsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getSupportFragmentManager().beginTransaction().add(
-                        R.id.utility_fragment_frame, new SettingsFragment()).commit();
+                utilityFragment = new SettingsFragment();
+                getFragmentManager().beginTransaction().add(
+                        R.id.utility_fragment_frame, utilityFragment).commit();
+                utilityFrame.setVisibility(View.VISIBLE);
+            }
+        });
+
+        Button aboutButton = findViewById(R.id.about_button);
+        aboutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                utilityFragment = new AboutFragment();
+                getFragmentManager().beginTransaction().add(
+                        R.id.utility_fragment_frame, utilityFragment).commit();
+                utilityFrame.setVisibility(View.VISIBLE);
             }
         });
 
     }
 
     @Override
-    public void closeSettings() {
-        //getSupportFragmentManager().beginTransaction().remove(R)
+    public void closeUtility() {
+        utilityFrame.setVisibility(View.GONE);
+        getFragmentManager().beginTransaction().remove(utilityFragment).commit();
     }
 }
