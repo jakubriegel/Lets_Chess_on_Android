@@ -15,6 +15,7 @@ public interface Const {
     int STATE_MOVE_ATTACK = 202;
     int STATE_END = 203;
     int STATE_PROMOTION = 204;
+    int STATE_PAUSE = 205;
 
     int CLASSIC_MODE = 301;
     int MODERN_MODE = 302;

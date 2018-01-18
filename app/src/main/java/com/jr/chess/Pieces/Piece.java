@@ -59,6 +59,17 @@ public abstract class Piece{
         position = movePosition;
     }
 
+    public static void resetAll(){
+        whitePawns = 0;
+        blackPawns = 0;
+        whiteBishops = 0;
+        blackBishops = 0;
+        whiteKnights = 0;
+        blackKnights = 0;
+        whiteRooks = 0;
+        blackRooks = 0;
+    }
+
 
 
 

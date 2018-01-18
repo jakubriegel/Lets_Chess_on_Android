@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    >
     <ListPreference
-        android:key="display_mode"
+        android:key="@string/display_key"
         android:summary="@string/preference_display_summary"
         android:title="@string/preference_display_title"
         android:dialogTitle="@string/preference_display_dialog"
@@ -14,4 +14,5 @@
         android:title="@string/preference_timer_title"
         android:summary=""
         android:defaultValue="false" />
+
 </PreferenceScreen>

@@ -1,16 +1,23 @@
 package com.jr.chess;
 
 import android.annotation.SuppressLint;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import com.jr.chess.Pieces.Piece;
 import com.jr.chess.Views.Board;
 
-public class GameActivity extends AppCompatActivity implements PromotionFragment.IPromotionFragment{
+import java.util.Objects;
+
+public class GameActivity extends AppCompatActivity
+        implements PromotionFragment.IPromotionFragment, LeaveGameFragment.ILeaveGameFragment{
 
     private Game game;
 
@@ -29,14 +36,20 @@ public class GameActivity extends AppCompatActivity implements PromotionFragment
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
 
-        fragmentFrame = findViewById(R.id.promotion_fragment_frame);
+        fragmentFrame = findViewById(R.id.game_fragment_frame);
         fragmentFrame.bringToFront();
         fragmentFrame.setVisibility(View.GONE);
 
         // setting up the game
+        Piece.resetAll();
         game = new Game(this, this);
         game.start();
-        displayMode = Const.CLASSIC_MODE;
+
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        String displayStr = preferences.getString(getResources().getString(R.string.display_key), "");
+        if (Objects.equals(displayStr, getResources().getString(R.string.classic_mode))) displayMode = Const.CLASSIC_MODE;
+        else  displayMode = Const.MODERN_MODE;
+
         board = findViewById(R.id.board_view);
         board.redraw(game.pieces, game.movePointers, game.attackPointers, displayMode);
         findViewById(R.id.board_layout).bringToFront();
@@ -51,7 +64,7 @@ public class GameActivity extends AppCompatActivity implements PromotionFragment
                 Position p = board.getSquare(new Position((int) event.getX(), (int) event.getY()));
                 game.processTouch(event, p);
 
-                redraw();
+                redrawBoard();
                 updateInfo();
 
                 return true;
@@ -60,7 +73,7 @@ public class GameActivity extends AppCompatActivity implements PromotionFragment
 
     }
 
-    void redraw(){
+    void redrawBoard(){
         board.redraw(game.pieces, game.movePointers, game.attackPointers, displayMode);
     }
 
@@ -75,7 +88,6 @@ public class GameActivity extends AppCompatActivity implements PromotionFragment
     }
 
     public void openPromotionFragment(int color){
-        fragmentFrame.bringToFront();
         if (color == Const.BLACK) fragmentFrame.setRotation(180);
         if (game.activeColor == Const.WHITE) fragmentFrame.setRotation(0);
         fragmentFrame.setVisibility(View.VISIBLE);
@@ -83,7 +95,7 @@ public class GameActivity extends AppCompatActivity implements PromotionFragment
         Bundle activeColor = new Bundle();
         activeColor.putInt("color", color);
         promotionFragment.setArguments(activeColor);
-        getSupportFragmentManager().beginTransaction().add(R.id.promotion_fragment_frame, promotionFragment).commit();
+        getSupportFragmentManager().beginTransaction().add(R.id.game_fragment_frame, promotionFragment).commit();
 
     }
 
@@ -94,4 +106,22 @@ public class GameActivity extends AppCompatActivity implements PromotionFragment
         game.state = Const.STATE_SELECT;
     }
 
+    @Override
+    public void onBackPressed() {
+        //super.onBackPressed();
+        if (game.state == Const.STATE_PAUSE) return;
+        game.pause();
+        fragmentFrame.setRotation(0);
+        fragmentFrame.bringToFront();
+        getSupportFragmentManager().beginTransaction().add(R.id.game_fragment_frame, new LeaveGameFragment()).commit();
+        fragmentFrame.setVisibility(View.VISIBLE);
+
+    }
+
+    @Override
+    public void closeLeaveGameFragment(LeaveGameFragment leaveGameFragment) {
+        fragmentFrame.setVisibility(View.GONE);
+        getSupportFragmentManager().beginTransaction().remove(leaveGameFragment).commit();
+        game.unpause();
+    }
 }

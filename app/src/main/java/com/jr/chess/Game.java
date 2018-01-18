@@ -19,6 +19,7 @@ import java.util.ListIterator;
 
 class Game {
     int state;
+    private int previousState;
     List<Position> movePointers;
     List<Position> attackPointers;
     private Piece activePiece;
@@ -40,6 +41,7 @@ class Game {
 
     void start(){
         state = Const.STATE_SELECT;
+        previousState = state;
         pieces = new ArrayList<>();
         deletedPieces = new ArrayList<>();
         movePointers = new ArrayList<>();
@@ -69,7 +71,6 @@ class Game {
         state = Const.STATE_END;
         winner = w;
         Log.v(Const.DEBUG_TAG, "end - END OF THE GAME ");
-
     }
 
     //case draw
@@ -178,6 +179,7 @@ class Game {
 
                     case Const.STATE_END:
                     case Const.STATE_PROMOTION:
+                    case Const.STATE_PAUSE:
                         break;
                 }
         }
@@ -427,7 +429,15 @@ class Game {
         }
 
         pieces.remove(activePiece);
-        gameActivity.redraw();
+        gameActivity.redrawBoard();
     }
 
+    void pause(){
+        previousState = state;
+        state = Const.STATE_PAUSE;
+    }
+
+    void unpause(){
+        state = previousState;
+    }
 }

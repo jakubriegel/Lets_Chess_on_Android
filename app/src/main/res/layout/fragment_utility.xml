@@ -9,6 +9,7 @@
 
     <FrameLayout
         android:id="@+id/utility_frame"
+        style="@style/preferencesStyle"
         android:layout_below="@+id/utility_header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

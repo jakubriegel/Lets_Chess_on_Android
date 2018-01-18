@@ -36,4 +36,9 @@
     <string name="title_activity_game">GameActivity</string>
     <string name="promotion_description">Choose the piece you want to promote to</string>
 
+    <!--leave game fragment-->
+    <string name="leave_game_header">Do you really want to leave the game?</string>
+    <string name="leave_game_confirm">leave</string>
+    <string name="leave_game_decline">continue</string>
+
 </resources>

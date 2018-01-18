@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="display_key">display_mode</string>
+    <string name="default_display_mode">classic</string>
+    <string name="classic_mode">classic</string>
+    <string name="modern_mode">modern</string>
     <string-array name="display_modes_strings">
         <item>classic</item>
         <item>modern</item>
