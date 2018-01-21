@@ -19,7 +19,7 @@ public abstract class Piece{
     static int blackRooks = 0;
 
     public Position position;
-    public final int color;
+    public int color;
     public int strokeColor;
     public Drawable image;
     public boolean enPassant;

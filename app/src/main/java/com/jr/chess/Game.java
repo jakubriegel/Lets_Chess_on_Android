@@ -25,7 +25,7 @@ class Game {
     private Piece activePiece;
     int activeColor;
     List<Piece> pieces;
-    private List<Piece> deletedPieces;
+    private List<Piece> capturedPieces;
     private Piece whiteKing, blackKing;
     private List<Piece> enPassantInPast;
 
@@ -43,7 +43,7 @@ class Game {
         state = Const.STATE_SELECT;
         previousState = state;
         pieces = new ArrayList<>();
-        deletedPieces = new ArrayList<>();
+        capturedPieces = new ArrayList<>();
         movePointers = new ArrayList<>();
         attackPointers = new ArrayList<>();
         enPassantInPast = new ArrayList<>();
@@ -101,10 +101,10 @@ class Game {
         }
 
         if(isSquareAttacked(king.position, king)){
-            if(mayCheckBeAvoided(king)) return;
-
-            else if(activeColor == Const.WHITE) end(Const.BLACK);
-            else end(Const.WHITE);
+            if(!mayCheckBeAvoided(king)) {
+                if (activeColor == Const.WHITE) end(Const.BLACK);
+                else end(Const.WHITE);
+            }
         }
     }
 
@@ -154,14 +154,12 @@ class Game {
                             if (Position.areEqual(i, touchPosition)){
                                 if(activePiece instanceof Pawn) if(!pieceOnSquare(i)){
                                     if(activePiece.color == Const.WHITE)
-                                        pieces.remove(getPieceOn(new Position(touchPosition.x, touchPosition.y-1)));
+                                        capture(getPieceOn(new Position(touchPosition.x, touchPosition.y - 1)));
                                     else
-                                        pieces.remove(getPieceOn(new Position(touchPosition.x, touchPosition.y+1)));
+                                        capture(getPieceOn(new Position(touchPosition.x, touchPosition.y + 1)));
                                 }
-                                if(pieceOnSquare(touchPosition)){
-                                    deletedPieces.add(getPieceOn(touchPosition));
-                                    pieces.remove(getPieceOn(touchPosition));
-                                }
+                                if(pieceOnSquare(touchPosition)) capture(getPieceOn(touchPosition));
+
                                 activePiece.moveTo(touchPosition);
                                 if(activePiece instanceof Pawn){ // check openPromotionFragment possibility
                                     if(activePiece.color == Const.WHITE && activePiece.position.y == 7)
@@ -400,6 +398,12 @@ class Game {
         }
         movingPiece.position = movingPiecePosition;
         return squares;
+    }
+
+    private void capture(Piece capturedPiece){
+        capturedPieces.add(capturedPiece);
+        pieces.remove(capturedPiece);
+        gameActivity.updatePads(capturedPiece);
     }
 
     private void promotion(Piece promotedPawn){

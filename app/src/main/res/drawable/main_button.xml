@@ -5,14 +5,3 @@
     <item android:drawable="@drawable/main_button_background" />
 </ripple>
 
-<!--<selector xmlns:android="http://schemas.android.com/apk/res/android">-->
-<!--<item android:state_pressed="true" android:drawable="@drawable/main_button_background">-->
-    <!--<ripple xmlns:android="http://schemas.android.com/apk/res/android"-->
-        <!--android:color="?android:colorControlHighlight">-->
-        <!--&lt;!&ndash;<item android:drawable="@drawable/main_button_background" />&ndash;&gt;-->
-    <!--</ripple>-->
-<!--</item>-->
-<!--<item android:drawable="@drawable/main_button_background" />-->
-
-<!--</selector>-->
-

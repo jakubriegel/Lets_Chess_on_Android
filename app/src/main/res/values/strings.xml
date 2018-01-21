@@ -34,11 +34,15 @@
 
     <!--game activity-->
     <string name="title_activity_game">GameActivity</string>
+    <string name="game_menu_button">menu</string>
+
     <string name="promotion_description">Choose the piece you want to promote to</string>
 
-    <!--leave game fragment-->
     <string name="leave_game_header">Do you really want to leave the game?</string>
-    <string name="leave_game_confirm">leave</string>
-    <string name="leave_game_decline">continue</string>
+    <string name="leave_game_confirm">yes</string>
+    <string name="leave_game_decline">no</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

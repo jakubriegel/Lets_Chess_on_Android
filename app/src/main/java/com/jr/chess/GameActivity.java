@@ -5,15 +5,19 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.jr.chess.Pieces.Piece;
 import com.jr.chess.Views.Board;
 
+import java.util.List;
 import java.util.Objects;
 
 public class GameActivity extends AppCompatActivity
@@ -22,9 +26,9 @@ public class GameActivity extends AppCompatActivity
     private Game game;
 
     private Board board;
-    private TextView activeColorText;
-    private TextView winnerText;
     private FrameLayout fragmentFrame;
+    private PlayerPadFragment whitePad;
+    private PlayerPadFragment blackPad;
 
     private int displayMode;
 
@@ -50,12 +54,10 @@ public class GameActivity extends AppCompatActivity
         if (Objects.equals(displayStr, getResources().getString(R.string.classic_mode))) displayMode = Const.CLASSIC_MODE;
         else  displayMode = Const.MODERN_MODE;
 
+        // setting up board
         board = findViewById(R.id.board_view);
         board.redraw(game.pieces, game.movePointers, game.attackPointers, displayMode);
         findViewById(R.id.board_layout).bringToFront();
-
-        activeColorText = findViewById(R.id.active_color_text);
-        winnerText = findViewById(R.id.winner_text);
 
         board.setOnTouchListener(new View.OnTouchListener() {
             @SuppressLint("ClickableViewAccessibility")
@@ -65,38 +67,42 @@ public class GameActivity extends AppCompatActivity
                 game.processTouch(event, p);
 
                 redrawBoard();
-                updateInfo();
 
                 return true;
             }
         });
 
+        // players pads
+        LinearLayout whitePadLayout = findViewById(R.id.white_pad);
+        FrameLayout blackPadFrame = findViewById(R.id.black_pad_frame);
+        DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
+        LinearLayout.LayoutParams padParams = new LinearLayout.LayoutParams(
+                (int)(.9 * displayMetrics.widthPixels), (int) TypedValue.applyDimension(
+                        TypedValue.COMPLEX_UNIT_DIP, 80, getResources().getDisplayMetrics()));
+        whitePadLayout.setLayoutParams(padParams);
+        blackPadFrame.setLayoutParams(padParams);
+
+        whitePad = (PlayerPadFragment) getSupportFragmentManager().findFragmentById(R.id.white_pad);
+        blackPad = (PlayerPadFragment) getSupportFragmentManager().findFragmentById(R.id.black_pad);
+
+        whitePad.capturedPad.setDisplayMode(displayMode);
+        blackPad.capturedPad.setDisplayMode(displayMode);
     }
 
     void redrawBoard(){
         board.redraw(game.pieces, game.movePointers, game.attackPointers, displayMode);
     }
 
-    private void updateInfo(){
-        if(game.activeColor == Const.WHITE) activeColorText.setText("Player: WHITE");
-        else activeColorText.setText("Player: BLACK");
-
-        if(game.state == Const.STATE_END){
-            if(game.winner == Const.WHITE) winnerText.setText("Winner: WHITE");
-            else winnerText.setText("Winner: BLACK");
-        }
-    }
-
     public void openPromotionFragment(int color){
+        fragmentFrame.bringToFront();
         if (color == Const.BLACK) fragmentFrame.setRotation(180);
         if (game.activeColor == Const.WHITE) fragmentFrame.setRotation(0);
-        fragmentFrame.setVisibility(View.VISIBLE);
         promotionFragment = new PromotionFragment();
         Bundle activeColor = new Bundle();
         activeColor.putInt("color", color);
         promotionFragment.setArguments(activeColor);
         getSupportFragmentManager().beginTransaction().add(R.id.game_fragment_frame, promotionFragment).commit();
-
+        fragmentFrame.setVisibility(View.VISIBLE);
     }
 
     public void closePromotionFragment(int type){
@@ -111,8 +117,8 @@ public class GameActivity extends AppCompatActivity
         //super.onBackPressed();
         if (game.state == Const.STATE_PAUSE) return;
         game.pause();
-        fragmentFrame.setRotation(0);
         fragmentFrame.bringToFront();
+        fragmentFrame.setRotation(0);
         getSupportFragmentManager().beginTransaction().add(R.id.game_fragment_frame, new LeaveGameFragment()).commit();
         fragmentFrame.setVisibility(View.VISIBLE);
 
@@ -123,5 +129,16 @@ public class GameActivity extends AppCompatActivity
         fragmentFrame.setVisibility(View.GONE);
         getSupportFragmentManager().beginTransaction().remove(leaveGameFragment).commit();
         game.unpause();
+    }
+
+    public void updatePads(Piece capturedPiece){
+        switch (capturedPiece.color){
+            case Const.WHITE:
+                    blackPad.capturedPad.addPiece(capturedPiece);
+                break;
+            case Const.BLACK:
+                    whitePad.capturedPad.addPiece(capturedPiece);
+                break;
+        }
     }
 }

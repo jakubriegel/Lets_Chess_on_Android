@@ -1,0 +1,46 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/player_pad_layout"
+    style="@style/playerPadStyle"
+    android:layout_width="match_parent"
+    android:layout_height="80dp"
+    android:layout_marginTop="5dp">
+
+    <com.jr.chess.Views.CapturedPad
+        android:id="@+id/capture_pad"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"/>
+
+    <LinearLayout
+        android:layout_width="40dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0"
+        android:orientation="vertical">
+        <Button
+            android:layout_width="26dp"
+            android:layout_height="26dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="2dp"
+            android:layout_marginLeft="7dp"
+            android:layout_marginRight="7dp"
+
+            android:background="@drawable/draw_icon"
+
+            tools:text="draw"
+            tools:textSize="12sp"/>
+        <Button
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="14dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+
+            android:background="@drawable/surrender_icon"
+
+            tools:text="sr"
+            tools:textSize="12sp"/>
+    </LinearLayout>
+</LinearLayout>

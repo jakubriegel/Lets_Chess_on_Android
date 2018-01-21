@@ -23,41 +23,34 @@
         android:gravity="center"
         android:clipChildren="false">
 
-        <LinearLayout
-            android:id="@+id/black_pad"
-            android:layout_width="match_parent"
-            android:layout_height="80dp">
-            <TextView
-                android:id="@+id/active_color_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:text="active_color_text"/>
-        </LinearLayout>
+        <FrameLayout
+            android:id="@+id/black_pad_frame"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:rotation="180">
+            <fragment
+                android:name="com.jr.chess.PlayerPadFragment"
+                android:id="@+id/black_pad"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </FrameLayout>
 
         <com.jr.chess.Views.Board
             android:id="@+id/board_view"
             android:layout_width="100dp"
             android:layout_height="100dp"
 
+            android:layout_marginBottom="15dp"
+            android:layout_marginTop="15dp"
+
             tools:layout_width="100dp"
             tools:layout_height="100dp"/>
-        <!--android:background="@drawable/board"-->
 
-        <LinearLayout
+        <fragment
+            android:name="com.jr.chess.PlayerPadFragment"
             android:id="@+id/white_pad"
-            android:layout_width="match_parent"
-            android:layout_height="80dp">
-            <TextView
-                android:id="@+id/state_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:text="state_text"/>
-            <TextView
-                android:id="@+id/winner_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:text="winner_text"/>
-        </LinearLayout>
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
     </LinearLayout>
 
     <com.jr.chess.Views.BoardGrid
@@ -68,5 +61,18 @@
         android:layout_centerVertical="true"
         android:background="@drawable/black_tile"
         />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+
+        android:background="@null"
+
+        android:elevation="0dp"
+        android:text="@string/game_menu_button"
+        android:textSize="12sp"
+        android:textColor="@color/colorAccent"/>
 
 </RelativeLayout>
