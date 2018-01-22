@@ -8,17 +8,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-public class LeaveGameFragment extends Fragment {
+public class GameLeaveFragment extends Fragment {
 
-    LeaveGameFragment self;
+    GameLeaveFragment self;
+    GameManagement gameManagement;
 
-    public interface ILeaveGameFragment{
-        void closeLeaveGameFragment(LeaveGameFragment leaveGameFragment);
-    }
-
-    ILeaveGameFragment iLeaveGameFragment;
-
-    public LeaveGameFragment() {
+    public GameLeaveFragment() {
         // Required empty public constructor
     }
 
@@ -27,16 +22,15 @@ public class LeaveGameFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         self = this;
+        gameManagement = (GameManagement) getActivity();
 
         View view = inflater.inflate(R.layout.fragment_leave_game, container, false);
-
-        iLeaveGameFragment = (ILeaveGameFragment) getActivity();
 
         Button confirmButton = view.findViewById(R.id.leave_game_confirm_button);
         confirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getActivity().finish();
+                gameManagement.endGame();
             }
         });
 
@@ -44,7 +38,7 @@ public class LeaveGameFragment extends Fragment {
         declineButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                iLeaveGameFragment.closeLeaveGameFragment(self);
+                gameManagement.closeFragment(self);
             }
         });
 

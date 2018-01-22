@@ -9,32 +9,37 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:gravity="center"
+        android:gravity="center_vertical"
         android:background="@drawable/ingame_fragment_background">
-        <TextView
+        <GridLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
-            android:layout_marginBottom="10dp"
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
-            android:text="@string/leave_game_header" />
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center">
+            android:columnCount="2">
             <Button
+                android:id="@+id/game_menu_end_button"
                 style="@style/gameMenuButtonStyle"
-                android:id="@+id/leave_game_confirm_button"
-                android:text="@string/leave_game_confirm" />
 
+                android:text="@string/game_menu_end_button"/>
             <Button
+                android:id="@+id/game_share_button"
                 style="@style/gameMenuButtonStyle"
-                android:id="@+id/leave_game_decline_button"
-                android:text="@string/leave_game_decline" />
 
-        </LinearLayout>
+                android:text="@string/end_game_share_board_button"/>
+        </GridLayout>
+        <Button
+            android:id="@+id/game_menu_continue_button"
+            style="@style/gameMenuButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_marginTop="0dp"
+            android:layout_marginBottom="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+
+            android:text="@string/game_menu_continue_button"/>
+
 
     </LinearLayout>
 

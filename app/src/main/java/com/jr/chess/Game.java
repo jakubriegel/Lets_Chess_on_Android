@@ -171,7 +171,6 @@ class Game {
                         break;
 
                     case Const.STATE_END:
-                    case Const.STATE_PROMOTION:
                     case Const.STATE_PAUSE:
                         break;
                 }
@@ -410,8 +409,8 @@ class Game {
     }
 
     private void promotion(Piece promotedPawn){
+        pause();
         gameActivity.openPromotionFragment(promotedPawn.color);
-        state = Const.STATE_PROMOTION;
     }
 
     void promotionAddPiece(int type){
@@ -445,6 +444,6 @@ class Game {
     }
 
     void unpause(){
-        state = previousState;
+        if(state == Const.STATE_PAUSE) state = previousState;
     }
 }

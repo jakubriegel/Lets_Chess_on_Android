@@ -3,25 +3,24 @@ package com.jr.chess;
 import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.widget.Toast;
 
 import com.jr.chess.Pieces.Piece;
 import com.jr.chess.Views.Board;
 
-import java.util.List;
 import java.util.Objects;
 
-public class GameActivity extends AppCompatActivity
-        implements PromotionFragment.IPromotionFragment, LeaveGameFragment.ILeaveGameFragment{
+public class GameActivity extends AppCompatActivity implements GameManagement {
 
     private Game game;
 
@@ -29,10 +28,9 @@ public class GameActivity extends AppCompatActivity
     private FrameLayout fragmentFrame;
     private PlayerPadFragment whitePad;
     private PlayerPadFragment blackPad;
+    private GameEndFragment gameEndFragment;
 
     private int displayMode;
-
-    private PromotionFragment promotionFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,9 +43,7 @@ public class GameActivity extends AppCompatActivity
         fragmentFrame.setVisibility(View.GONE);
 
         // setting up the game
-        Piece.resetAll();
-        game = new Game(this, this);
-        game.start();
+        resetGame();
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         String displayStr = preferences.getString(getResources().getString(R.string.display_key), "");
@@ -87,17 +83,65 @@ public class GameActivity extends AppCompatActivity
 
         whitePad.capturedPad.setDisplayMode(displayMode);
         blackPad.capturedPad.setDisplayMode(displayMode);
+
+        Button menuButton = findViewById(R.id.game_menu_button);
+        menuButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                switch (game.state){
+                    case Const.STATE_END:
+                        fragmentFrame.setVisibility(View.VISIBLE);
+                        break;
+                    case Const.STATE_MOVE_ATTACK:
+                    case Const.STATE_SELECT:
+                        openGameMenu();
+                        break;
+                    case Const.STATE_PAUSE:
+                        break;
+                }
+            }
+        });
+    }
+
+    public void endOfTheGame(int winner){
+        gameEndFragment = new GameEndFragment();
+        Bundle winnerCode = new Bundle();
+        winnerCode.putInt("winner", winner);
+        gameEndFragment.setArguments(winnerCode);
+        getSupportFragmentManager().beginTransaction().add(R.id.game_fragment_frame, gameEndFragment).commit();
+        fragmentFrame.bringToFront();
+        fragmentFrame.setVisibility(View.VISIBLE);
     }
 
     void redrawBoard(){
         board.redraw(game.pieces, game.movePointers, game.attackPointers, displayMode);
     }
 
+    public void updatePads(Piece capturedPiece){
+        switch (capturedPiece.color){
+            case Const.WHITE:
+                blackPad.capturedPad.addPiece(capturedPiece);
+                break;
+            case Const.BLACK:
+                whitePad.capturedPad.addPiece(capturedPiece);
+                break;
+        }
+    }
+
+    void openGameMenu(){
+        game.pause();
+        GameMenuFragment gameMenuFragment = new GameMenuFragment();
+        getSupportFragmentManager().beginTransaction().add(R.id.game_fragment_frame, gameMenuFragment).commit();
+        fragmentFrame.bringToFront();
+        fragmentFrame.setVisibility(View.VISIBLE);
+
+    }
+
     public void openPromotionFragment(int color){
         fragmentFrame.bringToFront();
         if (color == Const.BLACK) fragmentFrame.setRotation(180);
         if (game.activeColor == Const.WHITE) fragmentFrame.setRotation(0);
-        promotionFragment = new PromotionFragment();
+        PromotionFragment promotionFragment = new PromotionFragment();
         Bundle activeColor = new Bundle();
         activeColor.putInt("color", color);
         promotionFragment.setArguments(activeColor);
@@ -105,40 +149,61 @@ public class GameActivity extends AppCompatActivity
         fragmentFrame.setVisibility(View.VISIBLE);
     }
 
-    public void closePromotionFragment(int type){
-        game.promotionAddPiece(type);
-        getSupportFragmentManager().beginTransaction().remove(promotionFragment).commit();
-        fragmentFrame.setVisibility(View.GONE);
-        game.state = Const.STATE_SELECT;
+    @Override
+    public void onBackPressed() {
+        //super.onBackPressed(); in order not to close activity immediately
+        leaveGame();
+    }
+
+    // GameManagement interface
+
+    @Override
+    public Game getGame() {
+        return game;
     }
 
     @Override
-    public void onBackPressed() {
-        //super.onBackPressed();
+    public void resetGame(){
+        Piece.resetAll();
+        game = new Game(this, this);
+        game.start();
+        if(fragmentFrame.getVisibility() == View.VISIBLE) {
+            redrawBoard();
+            getSupportFragmentManager().beginTransaction().remove(gameEndFragment).commit();
+            fragmentFrame.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    public void leaveGame(){
         if (game.state == Const.STATE_PAUSE) return;
         game.pause();
         fragmentFrame.bringToFront();
         fragmentFrame.setRotation(0);
-        getSupportFragmentManager().beginTransaction().add(R.id.game_fragment_frame, new LeaveGameFragment()).commit();
+        getSupportFragmentManager().beginTransaction().add(R.id.game_fragment_frame, new GameLeaveFragment()).commit();
         fragmentFrame.setVisibility(View.VISIBLE);
-
     }
 
     @Override
-    public void closeLeaveGameFragment(LeaveGameFragment leaveGameFragment) {
+    public void closeFragment(Fragment fragmentToClose) {
+        getSupportFragmentManager().beginTransaction().remove(fragmentToClose).commit();
+        fragmentFrame.setRotation(0);
         fragmentFrame.setVisibility(View.GONE);
-        getSupportFragmentManager().beginTransaction().remove(leaveGameFragment).commit();
         game.unpause();
     }
 
-    public void updatePads(Piece capturedPiece){
-        switch (capturedPiece.color){
-            case Const.WHITE:
-                    blackPad.capturedPad.addPiece(capturedPiece);
-                break;
-            case Const.BLACK:
-                    whitePad.capturedPad.addPiece(capturedPiece);
-                break;
-        }
+    @Override
+    public void endGame() {
+        finish();
+    }
+
+    @Override
+    public void showBoard() {
+        fragmentFrame.setVisibility(View.GONE);
+    }
+
+    @Override // TODO: implement board sharing
+    public void shareBoard(){
+        Toast.makeText(getApplicationContext(), "Available soon...", Toast.LENGTH_SHORT).show();
     }
 }

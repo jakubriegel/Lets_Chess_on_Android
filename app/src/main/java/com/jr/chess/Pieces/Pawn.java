@@ -14,6 +14,7 @@ public class Pawn extends Piece {
 
     public Pawn(Context c, int _color) {
         super(c, _color);
+        type = Const.PAWN;
         strokeColor = ContextCompat.getColor(context, R.color.colorPawn);
         if (color == Const.WHITE) image = context.getResources().getDrawable(R.drawable.white_pawn);
         else image = context.getResources().getDrawable(R.drawable.black_pawn);

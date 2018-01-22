@@ -18,6 +18,7 @@ public abstract class Piece{
     static int whiteRooks = 0;
     static int blackRooks = 0;
 
+    public int type;
     public Position position;
     public int color;
     public int strokeColor;

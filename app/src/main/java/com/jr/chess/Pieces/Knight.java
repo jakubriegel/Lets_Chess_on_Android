@@ -13,6 +13,7 @@ import java.util.List;
 public class Knight extends Piece {
     public Knight(Context c, int _color) {
         super(c, _color);
+        type = Const.KNIGHT;
         strokeColor = ContextCompat.getColor(context, R.color.colorKnight);
         if (color == Const.WHITE) image = context.getResources().getDrawable(R.drawable.white_knight);
         else image = context.getResources().getDrawable(R.drawable.black_knight);
@@ -20,6 +21,7 @@ public class Knight extends Piece {
 
     public Knight(Context c, int _color, Position initPos) {
         super(c, _color, initPos);
+        type = Const.KNIGHT;
         strokeColor = ContextCompat.getColor(context, R.color.colorKnight);
         if (color == Const.WHITE) image = context.getResources().getDrawable(R.drawable.white_knight);
         else image = context.getResources().getDrawable(R.drawable.black_knight);

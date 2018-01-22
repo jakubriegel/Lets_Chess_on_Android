@@ -4,5 +4,5 @@
     <!--<corners android:topRightRadius="10dp" android:topLeftRadius="10dp" />-->
     <corners android:radius="10dp" />
     <!--<stroke android:width="2dip" android:color="@color/colorPrimaryGold"/>-->
-    <solid android:color="@color/colorTransAccent" />
+    <solid android:color="#61ECEFF1" />
 </shape>

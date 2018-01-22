@@ -6,18 +6,14 @@ import android.util.AttributeSet;
 import com.jr.chess.Const;
 import com.jr.chess.Pieces.Piece;
 import com.jr.chess.Position;
+import java.util.Collections;
 
 public class CapturedPad extends BoardView {
-
-    private int x;
-    private int y;
 
     public CapturedPad(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         setMaxTile(1);
-        displayMode = Const.CLASSIC_MODE;
-        x = 0;
-        y = 1;
+        displayMode = Const.CLASSIC_MODE; // ice
     }
 
     public void setDisplayMode(int mode){
@@ -26,10 +22,24 @@ public class CapturedPad extends BoardView {
 
     public void addPiece(Piece capturedPiece){
         if(displayMode == Const.CLASSIC_MODE) capturedPiece.color = Const.WHITE; // to avoid drawing upside down
-        capturedPiece.position = new Position(x++,y);
-        if(x == 8){ y--; x = 0; }
-
         piecesToDraw.add(capturedPiece);
+        updatePiecesToDraw();
+
         invalidate();
+    }
+
+    private void updatePiecesToDraw(){
+        // bubble sort
+        for(int i = 0; i < piecesToDraw.size()-1; i++)
+            if(piecesToDraw.get(i).type > piecesToDraw.get(i+1).type) {
+                Collections.swap(piecesToDraw, i, i+1);
+                i = 0;
+            }
+
+        int x = 0, y = 1;
+        for(Piece i : piecesToDraw){
+            i.position = new Position(x++,y);
+            if(x == 8){ y--; x = 0; }
+        }
     }
 }

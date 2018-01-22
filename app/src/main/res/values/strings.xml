@@ -42,7 +42,17 @@
     <string name="leave_game_confirm">yes</string>
     <string name="leave_game_decline">no</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <!--end of the game fragment-->
+    <string name="white_won">White won!</string>
+    <string name="black_won">Black won!</string>
+    <string name="draw">It\'s draw!</string>
 
+    <string name="end_game_menu_button">go to menu</string>
+    <string name="end_game_play_again_button">play again</string>
+    <string name="end_ame_show_board_button">show board</string>
+    <string name="end_game_share_board_button">share board</string>
+
+    <!--game menu-->
+    <string name="game_menu_end_button">end game</string>
+    <string name="game_menu_continue_button">continue</string>
 </resources>
