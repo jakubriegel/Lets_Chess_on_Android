@@ -66,18 +66,13 @@ class Game {
 
     }
 
-    // case someone won
     private void end(int w){
         state = Const.STATE_END;
         winner = w;
+        gameActivity.endOfTheGame(winner);
         Log.v(Const.DEBUG_TAG, "end - END OF THE GAME ");
     }
 
-    //case draw
-    private void end(){
-        state = Const.STATE_END;
-
-    }
 
     private void changeTurn(){
         for(Piece i : pieces) if(i.enPassant){
@@ -354,16 +349,24 @@ class Game {
     }
 
     private boolean isSquareAttacked(Position square, Piece protectedPiece){
+        Piece capturedPiece = null;
+        if(pieceOnSquare(square)) if(getPieceOn(square) != protectedPiece){
+            capturedPiece = getPieceOn(square);
+            pieces.remove(capturedPiece);
+        }
         Position protectedPiecePosition = protectedPiece.position;
         protectedPiece.position = square;
-        for(Piece i : pieces) if(i.position != null) if(i.color != protectedPiece.color) { // may be null because of getPieceOn()
+
+        for(Piece i : pieces) if(i.color != protectedPiece.color) {
             for (Position attackedSquare : getAttackPointers(i))
                 if (Position.areEqual(square, attackedSquare)) {
+                    if (capturedPiece != null) pieces.add(capturedPiece);
                     protectedPiece.position = protectedPiecePosition;
                     return true;
                 }
         }
         protectedPiece.position = protectedPiecePosition;
+        if (capturedPiece != null) pieces.add(capturedPiece);
         return false;
     }
 
