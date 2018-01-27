@@ -15,7 +15,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.jr.chess.MainActivity"
+    tools:context="eu.jrie.chess_time.MainActivity"
     android:orientation="vertical"
     android:gravity="center">
 
@@ -29,11 +29,13 @@
     <TextView
         android:layout_width="250dp"
         android:layout_height="70dp"
+        android:layout_marginBottom="30dp"
+
         android:text="@string/app_name"
         android:textAlignment="gravity"
         android:gravity="center"
         android:textSize="50sp"
-        android:textAllCaps="true"/>
+        android:textAllCaps="false"/>
 
     <Button
         style="@style/mainButtonStyle"

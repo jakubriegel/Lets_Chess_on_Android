@@ -1,46 +1,49 @@
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/player_pad_layout"
-    android:layout_width="match_parent"
-    android:layout_height="80dp"
-    android:layout_marginTop="5dp"
-    android:background="@drawable/player_pad_background">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="80dp">
 
-    <com.jr.chess.Views.CapturedPad
-        android:id="@+id/capture_pad"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"/>
-
+    <FrameLayout
+        android:id="@+id/player_pad_fragment_frame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
     <LinearLayout
-        android:layout_width="40dp"
-        android:layout_height="match_parent"
-        android:layout_weight="0"
-        android:orientation="vertical">
-        <Button
-            android:layout_width="26dp"
-            android:layout_height="26dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="2dp"
-            android:layout_marginLeft="7dp"
-            android:layout_marginRight="7dp"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/player_pad_background">
 
-            android:background="@drawable/draw_icon"
+            <eu.jrie.chess_time.Views.CapturedPad
+                android:id="@+id/capture_pad"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"/>
 
-            tools:text="draw"
-            tools:textSize="12sp"/>
-        <Button
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginBottom="14dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
+            <LinearLayout
+                android:layout_width="40dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0"
+                android:orientation="vertical"
+                android:gravity="center_vertical">
 
-            android:background="@drawable/surrender_icon"
+                <Button
+                    android:id="@+id/player_pad_draw_button"
+                    android:layout_width="26dp"
+                    android:layout_height="26dp"
+                    android:layout_marginBottom="2dp"
+                    android:layout_marginLeft="7dp"
+                    android:layout_marginRight="7dp"
 
-            tools:text="sr"
-            tools:textSize="12sp"/>
+                    android:background="@drawable/draw_icon" />
+
+                <Button
+                    android:id="@+id/player_pad_surrender_button"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginTop="4dp"
+
+                    android:background="@drawable/surrender_icon" />
+        </LinearLayout>
     </LinearLayout>
-</LinearLayout>
+</RelativeLayout>

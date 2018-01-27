@@ -1,13 +1,11 @@
-<resources>
-    <string name="app_name">Chess</string>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="app_name">Chess Time</string>
 
     <!--pieces-->
-    <string name="pawn">pawn</string>
     <string name="bishop">bishop</string>
     <string name="knight">knight</string>
     <string name="rook">rook</string>
     <string name="queen">queen</string>
-    <string name="king">king</string>
 
     <!--main activity-->
     <string name="game_start_button">Start Game</string>
@@ -25,7 +23,7 @@
 
     <!--about-->
     <string name="about_header">about</string>
-    <string name="about_app">Mauris dui enim, pharetra ut aliquam eu, dignissim nec lorem. Aliquam tristique elit non mollis sagittis. Suspendisse efficitur ligula tincidunt velit dictum varius. Suspendisse sit amet tincidunt nisl. Donec eget faucibus risus, ac rhoncus justo. Sed nec nunc ac urna placerat sollicitudin quis ut sem. In hac habitasse platea dictumst. Pellentesque sed libero in lorem feugiat tristique. Pellentesque volutpat elementum fermentum.</string>
+    <string name="about_app">This app is designed by Jakub Riegel. Discover more on jrie.eu.</string>
     <string name="about_icons_begin">Icons made by:\u0020</string>
     <string name="about_FlatIcon">Flat Icon</string>
     <string name="about_icons_and">\u0020and\u0020</string>
@@ -33,7 +31,6 @@
     <string name="about_flaticon_link">\u0020from www.flaticon.com</string>
 
     <!--game activity-->
-    <string name="title_activity_game">GameActivity</string>
     <string name="game_menu_button">menu</string>
 
     <string name="promotion_description">Choose the piece you want to promote to</string>
@@ -55,4 +52,11 @@
     <!--game menu-->
     <string name="game_menu_end_button">end game</string>
     <string name="game_menu_continue_button">continue</string>
+
+    <!--draw-->
+    <string name="draw_toast_text">your opponent offers draw</string>
+
+    <!--surrender fragment-->
+    <string name="surrender_confirm_button">surrender</string>
+    <string name="surrender_decline_button" tools:ignore="ButtonCase">cancel</string>
 </resources>

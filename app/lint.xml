@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lint>
+    <issue id="IconLocation">
+        <ignore path="src/main/res/drawable/background_img.png" />
+        <ignore path="src/main/res/drawable/black_bishop.png" />
+        <ignore path="src/main/res/drawable/black_king.png" />
+        <ignore path="src/main/res/drawable/black_knight.png" />
+        <ignore path="src/main/res/drawable/black_pawn.png" />
+        <ignore path="src/main/res/drawable/black_queen.png" />
+        <ignore path="src/main/res/drawable/black_rook.png" />
+        <ignore path="src/main/res/drawable/black_tile.png" />
+        <ignore path="src/main/res/drawable/chess_logo.png" />
+        <ignore path="src/main/res/drawable/draw_icon.png" />
+        <ignore path="src/main/res/drawable/draw_icon_accepted.png" />
+        <ignore path="src/main/res/drawable/draw_icon_ready.png" />
+        <ignore path="src/main/res/drawable/surrender_icon.png" />
+        <ignore path="src/main/res/drawable/white_bishop.png" />
+        <ignore path="src/main/res/drawable/white_king.png" />
+        <ignore path="src/main/res/drawable/white_knight.png" />
+        <ignore path="src/main/res/drawable/white_pawn.png" />
+        <ignore path="src/main/res/drawable/white_queen.png" />
+        <ignore path="src/main/res/drawable/white_rook.png" />
+    </issue>
+</lint>

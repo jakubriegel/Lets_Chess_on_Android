@@ -77,9 +77,5 @@
 
         <item name="android:textSize">12sp</item>
     </style>
-    
-    <style name="endGameButtonStyle" parent="mainButtonStyle">
-        <item name="android:textSize">12sp</item>
-    </style>
 
 </resources>

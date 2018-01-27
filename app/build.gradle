@@ -3,7 +3,7 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 26
     defaultConfig {
-        applicationId "com.jr.chess"
+        applicationId 'eu.jrie.chess'
         minSdkVersion 21
         targetSdkVersion 26
         versionCode 1
@@ -17,6 +17,10 @@ android {
         }
     }
     productFlavors {
+    }
+    compileOptions {
+        targetCompatibility 1.8
+        sourceCompatibility 1.8
     }
 }
 

@@ -1,0 +1,22 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+
+    android:background="@drawable/ingame_fragment_background">
+    <Button
+        android:id="@+id/surrender_decline_button"
+        style="@style/gameMenuButtonStyle"
+        android:layout_marginBottom="5dp"
+
+        android:text="@string/surrender_decline_button"/>
+
+    <Button
+        android:id="@+id/surrender_confirm_button"
+        style="@style/gameMenuButtonStyle"
+        android:layout_marginBottom="5dp"
+
+        android:text="@string/surrender_confirm_button"/>
+
+
+</LinearLayout>
