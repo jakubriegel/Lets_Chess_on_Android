@@ -15,7 +15,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="eu.jrie.chess_time.MainActivity"
+    tools:context="eu.jrie.lets_chess.MainActivity"
     android:orientation="vertical"
     android:gravity="center">
 

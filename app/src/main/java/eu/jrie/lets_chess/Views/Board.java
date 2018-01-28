@@ -1,4 +1,4 @@
-package eu.jrie.chess_time.Views;
+package eu.jrie.lets_chess.Views;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

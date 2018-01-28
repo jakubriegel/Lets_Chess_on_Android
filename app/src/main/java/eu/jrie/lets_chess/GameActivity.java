@@ -1,4 +1,4 @@
-package eu.jrie.chess_time;
+package eu.jrie.lets_chess;
 
 import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
@@ -17,8 +17,8 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import eu.jrie.chess_time.Pieces.Piece;
-import eu.jrie.chess_time.Views.Board;
+import eu.jrie.lets_chess.Pieces.Piece;
+import eu.jrie.lets_chess.Views.Board;
 
 import java.util.Objects;
 

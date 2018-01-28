@@ -1,4 +1,4 @@
-package eu.jrie.chess_time.Views;
+package eu.jrie.lets_chess.Views;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -9,7 +9,7 @@ import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.View;
 
-import eu.jrie.chess_time.R;
+import eu.jrie.lets_chess.R;
 
 
 public class BoardGrid extends View {

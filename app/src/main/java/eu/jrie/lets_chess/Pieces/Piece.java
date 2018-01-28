@@ -1,9 +1,9 @@
-package eu.jrie.chess_time.Pieces;
+package eu.jrie.lets_chess.Pieces;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 
-import eu.jrie.chess_time.Position;
+import eu.jrie.lets_chess.Position;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package eu.jrie.chess_time.UtilityFragments;
+package eu.jrie.lets_chess.UtilityFragments;
 
 import android.os.Bundle;
 import android.preference.PreferenceFragment;
@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import eu.jrie.chess_time.R;
+import eu.jrie.lets_chess.R;
 
 
 

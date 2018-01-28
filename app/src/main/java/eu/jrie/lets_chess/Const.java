@@ -1,4 +1,4 @@
-package eu.jrie.chess_time;
+package eu.jrie.lets_chess;
 
 public interface Const {
     int WHITE = 1;

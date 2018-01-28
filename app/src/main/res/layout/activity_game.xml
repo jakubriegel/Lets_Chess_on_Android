@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="eu.jrie.chess_time.GameActivity"
+    tools:context="eu.jrie.lets_chess.GameActivity"
     android:orientation="vertical"
     android:gravity="center">
 
@@ -28,13 +28,13 @@
             android:layout_height="wrap_content"
             android:rotation="180">
             <fragment
-                android:name="eu.jrie.chess_time.PlayerPadFragment"
+                android:name="eu.jrie.lets_chess.PlayerPadFragment"
                 android:id="@+id/black_pad"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
         </FrameLayout>
 
-        <eu.jrie.chess_time.Views.Board
+        <eu.jrie.lets_chess.Views.Board
             android:id="@+id/board_view"
             android:layout_width="100dp"
             android:layout_height="100dp"
@@ -46,13 +46,13 @@
             tools:layout_height="100dp"/>
 
         <fragment
-            android:name="eu.jrie.chess_time.PlayerPadFragment"
+            android:name="eu.jrie.lets_chess.PlayerPadFragment"
             android:id="@+id/white_pad"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
     </LinearLayout>
 
-    <eu.jrie.chess_time.Views.BoardGrid
+    <eu.jrie.lets_chess.Views.BoardGrid
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_centerHorizontal="true"

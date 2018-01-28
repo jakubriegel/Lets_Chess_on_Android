@@ -1,4 +1,4 @@
-package eu.jrie.chess_time.Views;
+package eu.jrie.lets_chess.Views;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -11,10 +11,10 @@ import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.View;
 
-import eu.jrie.chess_time.Const;
-import eu.jrie.chess_time.Pieces.Piece;
-import eu.jrie.chess_time.Position;
-import eu.jrie.chess_time.R;
+import eu.jrie.lets_chess.Const;
+import eu.jrie.lets_chess.Pieces.Piece;
+import eu.jrie.lets_chess.Position;
+import eu.jrie.lets_chess.R;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,16 +1,16 @@
-package eu.jrie.chess_time;
+package eu.jrie.lets_chess;
 
 import android.content.Context;
 import android.util.Log;
 import android.view.MotionEvent;
 
-import eu.jrie.chess_time.Pieces.Bishop;
-import eu.jrie.chess_time.Pieces.King;
-import eu.jrie.chess_time.Pieces.Knight;
-import eu.jrie.chess_time.Pieces.Pawn;
-import eu.jrie.chess_time.Pieces.Piece;
-import eu.jrie.chess_time.Pieces.Queen;
-import eu.jrie.chess_time.Pieces.Rook;
+import eu.jrie.lets_chess.Pieces.Bishop;
+import eu.jrie.lets_chess.Pieces.King;
+import eu.jrie.lets_chess.Pieces.Knight;
+import eu.jrie.lets_chess.Pieces.Pawn;
+import eu.jrie.lets_chess.Pieces.Piece;
+import eu.jrie.lets_chess.Pieces.Queen;
+import eu.jrie.lets_chess.Pieces.Rook;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,7 +66,7 @@ class Game {
 
     }
 
-    public void end(int w){
+    void end(int w){
         state = Const.STATE_END;
         winner = w;
         gameActivity.endOfTheGame(winner);

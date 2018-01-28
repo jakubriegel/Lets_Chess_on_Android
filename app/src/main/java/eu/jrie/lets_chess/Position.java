@@ -1,4 +1,4 @@
-package eu.jrie.chess_time;
+package eu.jrie.lets_chess;
 
 public class Position{
     public int x;

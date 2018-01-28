@@ -1,4 +1,4 @@
-package eu.jrie.chess_time.UtilityFragments;
+package eu.jrie.lets_chess.UtilityFragments;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
-import eu.jrie.chess_time.R;
+import eu.jrie.lets_chess.R;
 
 public class AboutFragment extends UtilityFragment {
     @Nullable

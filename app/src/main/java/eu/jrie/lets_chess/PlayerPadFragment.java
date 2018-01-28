@@ -1,4 +1,4 @@
-package eu.jrie.chess_time;
+package eu.jrie.lets_chess;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
 
-import eu.jrie.chess_time.Views.CapturedPad;
+import eu.jrie.lets_chess.Views.CapturedPad;
 
 public class PlayerPadFragment extends Fragment {
 

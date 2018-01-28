@@ -1,11 +1,11 @@
-package eu.jrie.chess_time.Views;
+package eu.jrie.lets_chess.Views;
 
 import android.content.Context;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
-import eu.jrie.chess_time.Const;
-import eu.jrie.chess_time.Pieces.Piece;
-import eu.jrie.chess_time.Position;
+import eu.jrie.lets_chess.Const;
+import eu.jrie.lets_chess.Pieces.Piece;
+import eu.jrie.lets_chess.Position;
 
 import java.util.ArrayList;
 import java.util.Collections;

@@ -1,4 +1,4 @@
-package eu.jrie.chess_time;
+package eu.jrie.lets_chess;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -7,9 +7,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
 
-import eu.jrie.chess_time.UtilityFragments.AboutFragment;
-import eu.jrie.chess_time.UtilityFragments.SettingsFragment;
-import eu.jrie.chess_time.UtilityFragments.UtilityFragment;
+import eu.jrie.lets_chess.UtilityFragments.AboutFragment;
+import eu.jrie.lets_chess.UtilityFragments.SettingsFragment;
+import eu.jrie.lets_chess.UtilityFragments.UtilityFragment;
 
 public class MainActivity extends AppCompatActivity implements UtilityFragment.IUtilityFragment{
 

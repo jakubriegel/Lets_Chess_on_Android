@@ -1,4 +1,4 @@
-package eu.jrie.chess_time;
+package eu.jrie.lets_chess;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

@@ -12,7 +12,7 @@
         android:layout_marginTop="5dp"
         android:background="@drawable/player_pad_background">
 
-            <eu.jrie.chess_time.Views.CapturedPad
+            <eu.jrie.lets_chess.Views.CapturedPad
                 android:id="@+id/capture_pad"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"

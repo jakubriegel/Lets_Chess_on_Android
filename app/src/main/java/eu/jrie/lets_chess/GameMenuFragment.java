@@ -1,4 +1,4 @@
-package eu.jrie.chess_time;
+package eu.jrie.lets_chess;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
