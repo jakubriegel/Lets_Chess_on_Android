@@ -3,6 +3,7 @@ package eu.jrie.lets_chess;
 import android.content.Context;
 import android.util.Log;
 import android.view.MotionEvent;
+import android.widget.LinearLayout;
 
 import eu.jrie.lets_chess.Pieces.Bishop;
 import eu.jrie.lets_chess.Pieces.King;
@@ -322,14 +323,15 @@ class Game {
 
     private boolean mayCheckBeAvoided(Piece king){
         if(isSquareAttacked(king.position, king)){
-            for(int i = 0; i < pieces.size(); i++){ // must be like this, because of possible change in pieces order during makeKingSafe()
-                if (pieces.get(i).color == king.color) {
-                    if (pieces.get(i) instanceof King) {
-                        if (!removeAttacked(getMovePointers(pieces.get(i)), pieces.get(i)).isEmpty()) return true;
-                        if (!removeAttacked(getAttackPointers(pieces.get(i)), pieces.get(i)).isEmpty()) return true;
+            List<Piece> tempPieces = new ArrayList<>(pieces);
+            for(Piece i : tempPieces) { // must be like this, see README.md -> code tricks
+                if (i.color == king.color) {
+                    if (i instanceof King) {
+                        if (!removeAttacked(getMovePointers(i), i).isEmpty()) return true;
+                        if (!removeAttacked(getAttackPointers(i), i).isEmpty()) return true;
                     } else {
-                        if (!makeKingSafe(pieces.get(i), getMovePointers(pieces.get(i))).isEmpty()) return true;
-                        if (!makeKingSafe(pieces.get(i), getAttackPointers(pieces.get(i))).isEmpty()) return true;
+                        if (!makeKingSafe(i, getMovePointers(i)).isEmpty()) return true;
+                        if (!makeKingSafe(i, getAttackPointers(i)).isEmpty()) return true;
                     }
                 }
             }
@@ -353,12 +355,13 @@ class Game {
         }
         Position protectedPiecePosition = protectedPiece.position;
         protectedPiece.position = square;
-
+        Log.v(Const.DEBUG_TAG, square.x + " " + square.y);
         for(Piece i : pieces) if(i.color != protectedPiece.color) {
             for (Position attackedSquare : getAttackPointers(i))
                 if (Position.areEqual(square, attackedSquare)) {
                     if (capturedPiece != null) pieces.add(capturedPiece);
                     protectedPiece.position = protectedPiecePosition;
+                    Log.v(Const.DEBUG_TAG, i.getClass().toString() + " " + i.color);
                     return true;
                 }
         }
@@ -369,6 +372,7 @@ class Game {
 
     // deleting attacked squares from kings moves
     private List<Position> removeAttacked(List<Position> squares, Piece protectedPiece){
+        Log.v(Const.DEBUG_TAG, "KING");
         ListIterator<Position> squaresIterator = squares.listIterator();
         Position tempSquare;
         while(squaresIterator.hasNext()) {
