@@ -1,4 +1,4 @@
-# Chess Time Android
+# Lets Chess on Android
 A small chess app for face to face games on Android phones. It is my first independent Android project. My aim was to practice Java and Android SDK. I also deployed this app to Play Store, to discover this process. 
 
 <img src="./docs/screenshots/main_menu.png" width="300dp" /> <img src="./docs/screenshots/game_1.png" width="300dp" />
