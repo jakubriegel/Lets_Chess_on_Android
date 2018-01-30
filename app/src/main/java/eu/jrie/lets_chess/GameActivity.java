@@ -50,7 +50,8 @@ public class GameActivity extends AppCompatActivity implements GameManagement {
         // getting settings
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         String displayStr = preferences.getString(getResources().getString(R.string.display_key), "");
-        if (Objects.equals(displayStr, getResources().getString(R.string.classic_mode))) displayMode = Const.CLASSIC_MODE;
+        if(Objects.equals(displayStr, "")) displayMode = Const.CLASSIC_MODE; // default preferences don't work on some devices
+        else if (Objects.equals(displayStr, getResources().getString(R.string.classic_mode))) displayMode = Const.CLASSIC_MODE;
         else  displayMode = Const.MODERN_MODE;
 
         // players pads
