@@ -17,7 +17,10 @@
     <string name="preference_display_title">display mode</string>
     <string name="preference_display_summary">choose between classic and modern piece set</string>
     <string name="preference_display_dialog">choose display mode</string>
-    <string name="preference_timer_title">show game time</string>
+    <string name="preference_timer_group">timer</string>
+    <string name="preference_timer_title">count time</string>
+    <string name="preference_time_begin">time at the beginning</string>
+    <string name="preference_time_added">time added after each move</string>
 
     <string name="utility_close">go back to main menu</string>
 
@@ -59,4 +62,10 @@
     <!--surrender fragment-->
     <string name="surrender_confirm_button">surrender</string>
     <string name="surrender_decline_button" tools:ignore="ButtonCase">cancel</string>
+
+    <!--set time fragment-->
+    <string name="timer_set_up_header">set the timer</string>
+    <string name="timer_beginning_text">time at the beginning of the game</string>
+    <string name="timer_add_text">time added after each move</string>
+    <string name="confirm_time_button">start</string>
 </resources>

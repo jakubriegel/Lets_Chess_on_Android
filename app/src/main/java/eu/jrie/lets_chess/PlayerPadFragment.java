@@ -1,12 +1,14 @@
 package eu.jrie.lets_chess;
 
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 
 import eu.jrie.lets_chess.Views.CapturedPad;
 
@@ -16,11 +18,19 @@ public class PlayerPadFragment extends Fragment {
 
     public CapturedPad capturedPad; // necessary to be visible for activity
 
-    private int color;
+    private byte color;
     private Button drawButton;
 
     private FrameLayout fragmentFrame;
     private SurrenderFragment surrenderFragment;
+
+    int timeToEnd;
+    int timeToAdd;
+    int timeToEndConst;
+    int timeToAddConst;
+    private TextView timerView;
+    private CountDownTimer timer;
+    private boolean measureTime;
 
     public PlayerPadFragment() {
         // Required empty public constructor
@@ -45,11 +55,30 @@ public class PlayerPadFragment extends Fragment {
         Button surrenderButton = view.findViewById(R.id.player_pad_surrender_button);
         surrenderButton.setOnClickListener(v -> confirmSurrender());
 
+        timerView = view.findViewById(R.id.player_pad_timer_view);
+        timer = null;
+        timeToEnd = 0;
+        updateTimerView();
+
         return view;
     }
 
-    public void setColor(int c){
+    public void setUp(byte c, int tB, int tA){
         color = c;
+        timeToEnd = tB;
+        timeToEndConst= tB;
+        if(timeToEnd > 0){
+            measureTime = true;
+            timeToAdd = tA;
+            timeToAddConst = tA;
+            if(color == Const.BLACK) timeToEnd -= timeToAdd;
+            updateTimerView();
+        }
+        else{
+            measureTime = false;
+            timerView.setVisibility(View.GONE);
+        }
+
     }
 
     public void setBackground(int id){
@@ -65,13 +94,67 @@ public class PlayerPadFragment extends Fragment {
     public void surrender(boolean sur){
         getChildFragmentManager().beginTransaction().remove(surrenderFragment).commit();
         fragmentFrame.setVisibility(View.GONE);
-        if(sur) gameManagement.proceedSurrendering(color);
+        if(sur) gameManagement.proceedFailure(color);
     }
 
     public void reset(){
         setBackground(R.drawable.draw_icon);
         capturedPad.reset();
+        timeToEnd = timeToEndConst;
+        if(timeToEnd > 0){
+            timeToAdd = timeToAddConst;
+            updateTimerView();
+        }
     }
+
+    public void end(){
+        if(measureTime) timer.cancel();
+    }
+
+    public void changeTurn(int activeColor){
+        if(activeColor == color){
+            if(measureTime) startTimer();
+        }
+        else {
+            if (measureTime){
+                stopTimer();
+                timeToEnd += timeToAdd;
+                updateTimerView();
+            }
+        }
+    }
+
+    private void updateTimerView(){
+        int min = timeToEnd / 60000;
+        int sec = (timeToEnd % 60000) / 1000;
+        String time = min + ":";
+        if(min < 10) time = "0" + time;
+        if(sec < 10) time += "0";
+        time += sec;
+        timerView.setText(time);
+    }
+
+    void startTimer(){
+        timer = new CountDownTimer(timeToEnd, 1000){
+            @Override
+            public void onTick(long l) {
+                timeToEnd -= 1000;
+                updateTimerView();
+            }
+
+            @Override
+            public void onFinish() {
+                timeToEnd = 0;
+                updateTimerView();
+                gameManagement.proceedFailure(color);
+            }
+        }.start();
+    }
+
+    void stopTimer(){
+        if(timer != null) timer.cancel();
+    }
+
 
 
 

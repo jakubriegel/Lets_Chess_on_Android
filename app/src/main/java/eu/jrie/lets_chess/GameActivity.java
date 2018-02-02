@@ -26,7 +26,7 @@ public class GameActivity extends AppCompatActivity implements GameManagement {
 
     private Game game;
 
-    private int drawState;
+    private byte drawState;
 
     private Board board;
     private FrameLayout fragmentFrame;
@@ -35,7 +35,6 @@ public class GameActivity extends AppCompatActivity implements GameManagement {
 
     private int displayMode;
 
-    @SuppressLint("ClickableViewAccessibility") // necessary for onTouch event listener
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         // setting up the activity
@@ -53,67 +52,35 @@ public class GameActivity extends AppCompatActivity implements GameManagement {
         if(Objects.equals(displayStr, "")) displayMode = Const.CLASSIC_MODE; // default preferences don't work on some devices
         else if (Objects.equals(displayStr, getResources().getString(R.string.classic_mode))) displayMode = Const.CLASSIC_MODE;
         else  displayMode = Const.MODERN_MODE;
+        boolean timerOn =preferences.getBoolean(getResources().getString(R.string.timer_on_key), false);
 
-        // players pads
-        RelativeLayout whitePadLayout = findViewById(R.id.white_pad);
-        FrameLayout blackPadFrame = findViewById(R.id.black_pad_frame); // instead of linLay, because of rotation
-        DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
-        LinearLayout.LayoutParams padParams = new LinearLayout.LayoutParams(
-                (int)(.9 * displayMetrics.widthPixels), (int) TypedValue.applyDimension(
-                TypedValue.COMPLEX_UNIT_DIP, 80, displayMetrics));
-        whitePadLayout.setLayoutParams(padParams);
-        blackPadFrame.setLayoutParams(padParams);
+        // setting up timers
+        int beginningTime = 0;
+        int addingTime = 0;
+        if(timerOn){
+            Button menuButton = findViewById(R.id.game_menu_button);
+            menuButton.setVisibility(View.GONE);
 
-        pads = new SparseArray<>();
-        pads.put(Const.WHITE, (PlayerPadFragment) getSupportFragmentManager().findFragmentById(R.id.white_pad));
-        pads.get(Const.WHITE).setColor(Const.WHITE);
-        pads.put(Const.BLACK, (PlayerPadFragment) getSupportFragmentManager().findFragmentById(R.id.black_pad));
-        pads.get(Const.BLACK).setColor(Const.BLACK);
+            SetTimerFragment setTimerFragment = new SetTimerFragment();
+            getSupportFragmentManager().beginTransaction().add(R.id.game_fragment_frame, setTimerFragment).commit();
+            fragmentFrame.setVisibility(View.VISIBLE);
+            fragmentFrame.bringToFront();
+        }
+        else initGame(beginningTime, addingTime);
 
-        pads.get(Const.WHITE).capturedPad.setDisplayMode(displayMode);
-        pads.get(Const.BLACK).capturedPad.setDisplayMode(displayMode);
-
-        // setting up the game
-        resetGame();
-
-        drawState = Const.NO_DRAW;
-
-        // setting up board
-        board = findViewById(R.id.board_view);
-        board.redraw(game.pieces, game.movePointers, game.attackPointers, displayMode);
-        findViewById(R.id.board_layout).bringToFront();
-
-
-        board.setOnTouchListener((view, event) -> {
-            Position p = board.getSquare(new Position((int) event.getX(), (int) event.getY()));
-            game.processTouch(event, p);
-
-            redrawBoard();
-
-            return true;
-        });
-
-        // menu button
-        Button menuButton = findViewById(R.id.game_menu_button);
-        menuButton.setOnClickListener(view -> {
-                switch (game.state){
-                    case Const.STATE_END:
-                        fragmentFrame.setVisibility(View.VISIBLE);
-                        break;
-                    case Const.STATE_MOVE_ATTACK:
-                    case Const.STATE_SELECT:
-                        openGameMenu();
-                        break;
-                    case Const.STATE_PAUSE:
-                        break;
-                }
-            });
     }
 
-    public void endOfTheGame(int winner){
+    void changeTurn(int activeColor){
+        pads.get(Const.WHITE).changeTurn(activeColor);
+        pads.get(Const.BLACK).changeTurn(activeColor);
+    }
+
+    public void endOfTheGame(byte winner){
+        pads.get(Const.WHITE).end();
+        pads.get(Const.BLACK).end();
         gameEndFragment = new GameEndFragment();
         Bundle winnerCode = new Bundle();
-        winnerCode.putInt("winner", winner);
+        winnerCode.putByte("winner", winner);
         gameEndFragment.setArguments(winnerCode);
         getSupportFragmentManager().beginTransaction().add(R.id.game_fragment_frame, gameEndFragment).commit();
         fragmentFrame.bringToFront();
@@ -143,13 +110,13 @@ public class GameActivity extends AppCompatActivity implements GameManagement {
         fragmentFrame.setVisibility(View.VISIBLE);
     }
 
-    public void openPromotionFragment(int color){
+    public void openPromotionFragment(byte color){
         fragmentFrame.bringToFront();
         if (color == Const.BLACK) fragmentFrame.setRotation(180);
         if (game.activeColor == Const.WHITE) fragmentFrame.setRotation(0);
         PromotionFragment promotionFragment = new PromotionFragment();
         Bundle activeColor = new Bundle();
-        activeColor.putInt("color", color);
+        activeColor.putByte("color", color);
         promotionFragment.setArguments(activeColor);
         getSupportFragmentManager().beginTransaction().add(R.id.game_fragment_frame, promotionFragment).commit();
         fragmentFrame.setVisibility(View.VISIBLE);
@@ -166,6 +133,63 @@ public class GameActivity extends AppCompatActivity implements GameManagement {
     @Override
     public Game getGame() {
         return game;
+    }
+
+    @SuppressLint("ClickableViewAccessibility") // necessary for onTouch event listener
+    public void initGame(int beginningTime, int addingTime){
+        // players pads
+        RelativeLayout whitePadLayout = findViewById(R.id.white_pad);
+        FrameLayout blackPadFrame = findViewById(R.id.black_pad_frame); // instead of linLay, because of rotation
+        DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
+        LinearLayout.LayoutParams padParams = new LinearLayout.LayoutParams(
+                (int)(.9 * displayMetrics.widthPixels), (int) TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP, 80, displayMetrics));
+        whitePadLayout.setLayoutParams(padParams);
+        blackPadFrame.setLayoutParams(padParams);
+
+        pads = new SparseArray<>();
+        pads.put(Const.WHITE, (PlayerPadFragment) getSupportFragmentManager().findFragmentById(R.id.white_pad));
+        pads.get(Const.WHITE).setUp(Const.WHITE, beginningTime, addingTime);
+        pads.put(Const.BLACK, (PlayerPadFragment) getSupportFragmentManager().findFragmentById(R.id.black_pad));
+        pads.get(Const.BLACK).setUp(Const.BLACK, beginningTime, addingTime);
+
+        pads.get(Const.WHITE).capturedPad.setDisplayMode(displayMode);
+        pads.get(Const.BLACK).capturedPad.setDisplayMode(displayMode);
+
+        // setting up the game
+        resetGame();
+
+        // setting up board
+        board = findViewById(R.id.board_view);
+        drawState = Const.NO_DRAW;
+        board.redraw(game.pieces, game.movePointers, game.attackPointers, displayMode);
+        findViewById(R.id.board_layout).bringToFront();
+
+        board.setOnTouchListener((view, event) -> {
+            Position p = board.getSquare(new Position((int) event.getX(), (int) event.getY()));
+            game.processTouch(event, p);
+
+            redrawBoard();
+
+            return true;
+        });
+
+        // menu button
+        Button menuButton = findViewById(R.id.game_menu_button);
+        menuButton.setVisibility(View.VISIBLE);
+        menuButton.setOnClickListener(view -> {
+            switch (game.state){
+                case Const.STATE_END:
+                    fragmentFrame.setVisibility(View.VISIBLE);
+                    break;
+                case Const.STATE_MOVE_ATTACK:
+                case Const.STATE_SELECT:
+                    openGameMenu();
+                    break;
+                case Const.STATE_PAUSE:
+                    break;
+            }
+        });
     }
 
     @Override
@@ -198,12 +222,23 @@ public class GameActivity extends AppCompatActivity implements GameManagement {
         getSupportFragmentManager().beginTransaction().remove(fragmentToClose).commit();
         fragmentFrame.setRotation(0);
         fragmentFrame.setVisibility(View.GONE);
-        game.unpause();
+        if(fragmentToClose instanceof SetTimerFragment);
+        else game.unpause();
     }
 
     @Override
     public void endGame() {
         finish();
+    }
+
+    @Override
+    public void pauseGame() {
+        pads.get(game.activeColor).stopTimer();
+    }
+
+    @Override
+    public void unpauseGame() {
+        pads.get(game.activeColor).startTimer();
     }
 
     @Override
@@ -217,7 +252,7 @@ public class GameActivity extends AppCompatActivity implements GameManagement {
     }
 
     @Override
-    public void manageDraw(int color) {
+    public void manageDraw(byte color) {
         switch (drawState){
             case Const.NO_DRAW:
                 drawState = color;
@@ -252,7 +287,7 @@ public class GameActivity extends AppCompatActivity implements GameManagement {
     }
 
     @Override
-    public void proceedSurrendering(int color) {
+    public void proceedFailure(byte color) {
         game.end(GameManagement.switchColor(color));
     }
 }

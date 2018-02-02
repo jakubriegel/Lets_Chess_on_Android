@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class King extends Piece {
-    public King(Context c, int _color) {
+    public King(Context c, byte _color) {
         super(c, _color);
         type = Const.KING;
         strokeColor = ContextCompat.getColor(context, R.color.colorKing);

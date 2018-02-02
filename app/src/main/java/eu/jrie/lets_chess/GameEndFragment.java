@@ -24,7 +24,7 @@ public class GameEndFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_game_end, container, false);
 
         Bundle winnerCode = getArguments();
-        int winner = winnerCode.getInt("winner");
+        byte winner = winnerCode.getByte("winner");
 
         TextView resultText = view.findViewById(R.id.game_result_text);
         switch (winner){

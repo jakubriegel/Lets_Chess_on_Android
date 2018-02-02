@@ -1,26 +1,26 @@
 package eu.jrie.lets_chess;
 
 public interface Const {
-    int WHITE = 1;
-    int BLACK = 2;
-    int DRAW = 3;
+    byte WHITE = 1;
+    byte BLACK = 2;
+    byte DRAW = 3;
 
-    int PAWN = 101;
-    int BISHOP = 102;
-    int KNIGHT = 103;
-    int ROOK = 104;
-    int QUEEN = 105;
-    int KING = 106;
+    byte PAWN = 11;
+    byte BISHOP = 12;
+    byte KNIGHT = 13;
+    byte ROOK = 14;
+    byte QUEEN = 15;
+    byte KING = 16;
 
-    int STATE_SELECT = 201;
-    int STATE_MOVE_ATTACK = 202;
-    int STATE_END = 203;
-    int STATE_PAUSE = 204;
+    byte STATE_SELECT = 21;
+    byte STATE_MOVE_ATTACK = 22;
+    byte STATE_END = 23;
+    byte STATE_PAUSE = 24;
 
-    int CLASSIC_MODE = 301;
-    int MODERN_MODE = 302;
+    byte CLASSIC_MODE = 31;
+    byte MODERN_MODE = 32;
 
-    int NO_DRAW = 403;
+    byte NO_DRAW = 41;
 
     String DEBUG_TAG = "debug_jr";
 

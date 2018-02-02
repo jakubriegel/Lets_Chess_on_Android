@@ -78,4 +78,21 @@
         <item name="android:textSize">12sp</item>
     </style>
 
+    <style name="seekBarStyle" parent="AppTheme">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_margin">10dp</item>
+
+        <item name="android:thumbTint">@color/colorPrimaryGold</item>
+
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="timePreviewTextStyle">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:textColor">@color/colorPrimaryGold</item>
+        <item name="android:textSize">40sp</item>
+    </style>
+
 </resources>

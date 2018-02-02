@@ -30,7 +30,8 @@ abstract class BoardView extends View {
 
     int displayMode;
     private int oneTileWidth;
-    private int maxTile;
+    private int maxY;
+    private int maxX;
 
     private int modernRadius;
     private int pointerRadius;
@@ -53,8 +54,9 @@ abstract class BoardView extends View {
         oneTileWidth = 0;
     }
 
-    void setMaxTile(int max){
-        maxTile = max;
+    void setMaxXY(int x, int y){
+        maxX = x;
+        maxY = y;
     }
 
     @SuppressLint("ResourceAsColor")
@@ -63,7 +65,7 @@ abstract class BoardView extends View {
         super.onDraw(canvas);
 
         if(oneTileWidth == 0){
-            oneTileWidth = this.getWidth() / 8;
+            oneTileWidth = this.getWidth() / (maxX+1);
             modernRadius = (int)(oneTileWidth * .3);
             pointerRadius = (int)(oneTileWidth * .2);
         }
@@ -153,9 +155,9 @@ abstract class BoardView extends View {
 
     public Position getSquare(Position p){
         Position squarePosition = new Position(p.x, p.y); // sidestep to avoid reference
-        int oneWidth = this.getWidth() / 8;
+        int oneWidth = this.getWidth() / (maxX+1);
         squarePosition.x /= oneWidth;
-        squarePosition.y = 7-(squarePosition.y / oneWidth);
+        squarePosition.y = maxY-(squarePosition.y / oneWidth);
 
         return squarePosition;
     }
@@ -163,7 +165,7 @@ abstract class BoardView extends View {
     private Position toPixels(Position p){
         Position pixelPosition = new Position(p.x, p.y); // sidestep to avoid reference
         pixelPosition.x = pixelPosition.x * oneTileWidth;
-        pixelPosition.y = (maxTile-pixelPosition.y) * oneTileWidth;
+        pixelPosition.y = (maxY -pixelPosition.y) * oneTileWidth;
 
         return pixelPosition;
     }

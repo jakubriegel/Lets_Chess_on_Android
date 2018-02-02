@@ -12,7 +12,7 @@ public class Board extends BoardView {
 
     public Board(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-        setMaxTile(7);
+        setMaxXY(7,7);
     }
 
     @SuppressLint("ClickableViewAccessibility")

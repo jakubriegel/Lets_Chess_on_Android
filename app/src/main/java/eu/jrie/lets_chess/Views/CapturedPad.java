@@ -14,7 +14,7 @@ public class CapturedPad extends BoardView {
 
     public CapturedPad(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-        setMaxTile(1);
+        setMaxXY(8,1);
         displayMode = Const.CLASSIC_MODE; // ice
     }
 
@@ -41,7 +41,7 @@ public class CapturedPad extends BoardView {
         int x = 0, y = 1;
         for(Piece i : piecesToDraw){
             i.position = new Position(x++,y);
-            if(x == 8){ y--; x = 0; }
+            if(x == 9){ y--; x = 0; }
         }
 
     }

@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Knight extends Piece {
-    public Knight(Context c, int _color) {
+    public Knight(Context c, byte _color) {
         super(c, _color);
         type = Const.KNIGHT;
         strokeColor = ContextCompat.getColor(context, R.color.colorKnight);
@@ -19,7 +19,7 @@ public class Knight extends Piece {
         else image = context.getResources().getDrawable(R.drawable.black_knight);
     }
 
-    public Knight(Context c, int _color, Position initPos) {
+    public Knight(Context c, byte _color, Position initPos) {
         super(c, _color, initPos);
         type = Const.KNIGHT;
         strokeColor = ContextCompat.getColor(context, R.color.colorKnight);

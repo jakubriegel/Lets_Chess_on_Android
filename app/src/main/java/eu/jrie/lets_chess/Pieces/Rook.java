@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Rook extends Piece {
-    public Rook(Context c, int _color) {
+    public Rook(Context c, byte _color) {
         super(c, _color);
         type = Const.ROOK;
         strokeColor = ContextCompat.getColor(context, R.color.colorRook);
@@ -19,7 +19,7 @@ public class Rook extends Piece {
         else image = context.getResources().getDrawable(R.drawable.black_rook);
     }
 
-    public Rook(Context c, int _color, Position initPos) {
+    public Rook(Context c, byte _color, Position initPos) {
         super(c, _color, initPos);
         type = Const.ROOK;
         strokeColor = ContextCompat.getColor(context, R.color.colorRook);

@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Bishop extends Piece {
-    public Bishop(Context c, int _color) {
+    public Bishop(Context c, byte _color) {
         super(c, _color);
         type = Const.BISHOP;
         strokeColor = ContextCompat.getColor(context, R.color.colorBishop);
@@ -19,7 +19,7 @@ public class Bishop extends Piece {
         else image = context.getResources().getDrawable(R.drawable.black_bishop);
     }
 
-    public Bishop(Context c, int _color, Position initPos) {
+    public Bishop(Context c, byte _color, Position initPos) {
         super(c, _color, initPos);
         type = Const.BISHOP;
         strokeColor = ContextCompat.getColor(context, R.color.colorBishop);

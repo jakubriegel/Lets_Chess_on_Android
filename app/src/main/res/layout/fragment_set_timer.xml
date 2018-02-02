@@ -1,0 +1,65 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:background="@drawable/background"
+    tools:context="eu.jrie.lets_chess.PromotionFragment">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:background="@drawable/ingame_fragment_background"
+        android:layout_margin="15dp"
+        android:paddingBottom="15dp"
+        android:paddingTop="20dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+
+            android:text="@string/timer_set_up_header"
+            android:textSize="25sp"
+            android:textColor="@color/colorPrimaryGold"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/timer_beginning_text"/>
+
+        <TextView
+            android:id="@+id/beginning_time_preview"
+            style="@style/timePreviewTextStyle"
+            tools:text="2min" />
+
+        <SeekBar
+            android:id="@+id/beginning_time_bar"
+            style="@style/seekBarStyle"
+            android:max="14"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/timer_add_text"/>
+
+        <TextView
+            android:id="@+id/added_time_preview"
+            style="@style/timePreviewTextStyle"
+            tools:text="30s"/>
+
+        <SeekBar
+            android:id="@+id/add_time_bar"
+            style="@style/seekBarStyle"
+            android:max="10"/>
+        
+        <Button
+            android:id="@+id/confirm_time_button"
+            style="@style/gameMenuButtonStyle"
+            android:text="@string/confirm_time_button"/>
+
+
+    </LinearLayout>
+
+</LinearLayout>

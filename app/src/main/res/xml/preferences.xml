@@ -9,10 +9,12 @@
         android:entries="@array/display_modes_strings"
         android:entryValues="@array/display_modes_strings"
         android:defaultValue="@string/default_display_mode"/>
-    <CheckBoxPreference
-        android:key="display_timer"
+
+    <SwitchPreference
+        android:key="@string/timer_on_key"
         android:title="@string/preference_timer_title"
         android:summary=""
         android:defaultValue="false" />
+
 
 </PreferenceScreen>

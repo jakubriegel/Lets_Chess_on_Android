@@ -27,7 +27,7 @@ public class PromotionFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_promotion, container, false);
 
         Bundle activeColor = getArguments();
-        int color = activeColor.getInt("color");
+        byte color = activeColor.getByte("color");
 
         Button knightButton = view.findViewById(R.id.promotion_knight_button);
         Button bishopButton = view.findViewById(R.id.promotion_bishop_button);

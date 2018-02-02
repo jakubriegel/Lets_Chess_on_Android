@@ -18,9 +18,9 @@ public abstract class Piece{
     static int whiteRooks = 0;
     static int blackRooks = 0;
 
-    public int type;
+    public byte type;
     public Position position;
-    public int color;
+    public byte color;
     public int strokeColor;
     public Drawable image;
     public boolean enPassant;
@@ -29,7 +29,7 @@ public abstract class Piece{
 
     final Context context; // necessary for processing colors
 
-    Piece(Context c, int _color){
+    Piece(Context c, byte _color){
         context = c;
         color = _color;
         firstMove = true;
@@ -38,7 +38,7 @@ public abstract class Piece{
         position = initialPosition();
     }
 
-    Piece(Context c, int _color, Position initPos){
+    Piece(Context c, byte _color, Position initPos){
         context = c;
         color = _color;
         firstMove = true;

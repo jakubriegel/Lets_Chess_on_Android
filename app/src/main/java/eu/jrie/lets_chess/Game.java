@@ -19,18 +19,18 @@ import java.util.ListIterator;
 
 
 class Game {
-    int state;
-    private int previousState;
+    byte state;
+    private byte previousState;
     List<Position> movePointers;
     List<Position> attackPointers;
     private Piece activePiece;
-    int activeColor;
+    byte activeColor;
     List<Piece> pieces;
     private List<Piece> capturedPieces;
     private Piece whiteKing, blackKing;
     private List<Piece> enPassantInPast;
 
-    int winner;
+    byte winner;
 
     private final Context context;
     private final GameActivity gameActivity;
@@ -51,7 +51,7 @@ class Game {
 
         activeColor = Const.WHITE;
 
-        for (int color = Const.WHITE; color <= Const.BLACK; color++){
+        for (byte color = Const.WHITE; color <= Const.BLACK; color++){
             for(int i = 0; i < 8; i++) pieces.add(new Pawn(context, color));
             pieces.add(new Bishop(context, color));
             pieces.add(new Bishop(context, color));
@@ -65,9 +65,11 @@ class Game {
             else blackKing = pieces.get(pieces.size()-1);
         }
 
+        gameActivity.changeTurn(activeColor);
+
     }
 
-    void end(int w){
+    void end(byte w){
         state = Const.STATE_END;
         winner = w;
         gameActivity.endOfTheGame(winner);
@@ -100,6 +102,8 @@ class Game {
                 else end(Const.WHITE);
             }
         }
+
+        gameActivity.changeTurn(activeColor);
     }
 
     void processTouch(MotionEvent event, Position touchPosition){
@@ -185,7 +189,7 @@ class Game {
 
     private Piece getPieceOn(Position p){
         for(Piece i : pieces) if(Position.areEqual(p, i.position)) return i;
-        return new Pawn(context, 0); // protection for null pointer exception
+        return new Pawn(context, (byte) 0); // protection for null pointer exception
     }
 
     private List<Position> getMovePointers(Piece p){
@@ -443,9 +447,11 @@ class Game {
     void pause(){
         previousState = state;
         state = Const.STATE_PAUSE;
+        gameActivity.pauseGame();
     }
 
     void unpause(){
         if(state == Const.STATE_PAUSE) state = previousState;
+        gameActivity.unpauseGame();
     }
 }

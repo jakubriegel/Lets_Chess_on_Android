@@ -12,7 +12,7 @@ import java.util.List;
 
 public class Pawn extends Piece {
 
-    public Pawn(Context c, int _color) {
+    public Pawn(Context c, byte _color) {
         super(c, _color);
         type = Const.PAWN;
         strokeColor = ContextCompat.getColor(context, R.color.colorPawn);
