@@ -68,4 +68,7 @@
     <string name="timer_beginning_text">time at the beginning of the game</string>
     <string name="timer_add_text">time added after each move</string>
     <string name="confirm_time_button">start</string>
+
+    <!--board sharing-->
+    <string name="toast_board_sharing">board image saved to the gallery</string>
 </resources>

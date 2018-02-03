@@ -1,25 +1,32 @@
 package eu.jrie.lets_chess;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.ContentValues;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.os.Environment;
 import android.preference.PreferenceManager;
+import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.SparseArray;
 import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
-
 import eu.jrie.lets_chess.Pieces.Piece;
 import eu.jrie.lets_chess.Views.Board;
-
+import java.io.File;
+import java.io.FileOutputStream;
+import java.util.Date;
 import java.util.Objects;
 
 public class GameActivity extends AppCompatActivity implements GameManagement {
@@ -32,6 +39,8 @@ public class GameActivity extends AppCompatActivity implements GameManagement {
     private FrameLayout fragmentFrame;
     private SparseArray<PlayerPadFragment> pads;
     private GameEndFragment gameEndFragment;
+    private Button menuButton;
+    private ImageView brandingImage;
 
     private int displayMode;
 
@@ -40,6 +49,9 @@ public class GameActivity extends AppCompatActivity implements GameManagement {
         // setting up the activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
+        menuButton = findViewById(R.id.game_menu_button);
+        brandingImage = findViewById(R.id.branding_image);
+        brandingImage.setVisibility(View.INVISIBLE);
 
         // preparing spot for fragments
         fragmentFrame = findViewById(R.id.game_fragment_frame);
@@ -58,7 +70,6 @@ public class GameActivity extends AppCompatActivity implements GameManagement {
         int beginningTime = 0;
         int addingTime = 0;
         if(timerOn){
-            Button menuButton = findViewById(R.id.game_menu_button);
             menuButton.setVisibility(View.GONE);
 
             SetTimerFragment setTimerFragment = new SetTimerFragment();
@@ -175,7 +186,6 @@ public class GameActivity extends AppCompatActivity implements GameManagement {
         });
 
         // menu button
-        Button menuButton = findViewById(R.id.game_menu_button);
         menuButton.setVisibility(View.VISIBLE);
         menuButton.setOnClickListener(view -> {
             switch (game.state){
@@ -222,8 +232,7 @@ public class GameActivity extends AppCompatActivity implements GameManagement {
         getSupportFragmentManager().beginTransaction().remove(fragmentToClose).commit();
         fragmentFrame.setRotation(0);
         fragmentFrame.setVisibility(View.GONE);
-        if(fragmentToClose instanceof SetTimerFragment);
-        else game.unpause();
+        if(!(fragmentToClose instanceof SetTimerFragment)) game.unpause();
     }
 
     @Override
@@ -246,9 +255,64 @@ public class GameActivity extends AppCompatActivity implements GameManagement {
         fragmentFrame.setVisibility(View.GONE);
     }
 
-    @Override // TODO: implement board sharing
+    @Override
     public void shareBoard(){
-        Toast.makeText(getApplicationContext(), "Available soon...", Toast.LENGTH_SHORT).show();
+        // check for permissions
+        final int REQUEST_EXTERNAL_STORAGE = 1;
+        String[] PERMISSIONS_STORAGE = {
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+        };
+
+        int permission = ActivityCompat.checkSelfPermission(
+                this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        if (permission != PackageManager.PERMISSION_GRANTED)
+            ActivityCompat.requestPermissions(
+                    this, PERMISSIONS_STORAGE, REQUEST_EXTERNAL_STORAGE);
+        else{
+            // prepare layout
+            fragmentFrame.setVisibility(View.GONE);
+            menuButton.setVisibility(View.GONE);
+            brandingImage.bringToFront();
+            brandingImage.setVisibility(View.VISIBLE);
+
+            Date now = new Date();
+            android.text.format.DateFormat.format("yyyy-MM-dd_hh:mm:ss", now);
+
+            try {
+                View view = getWindow().getDecorView().getRootView();
+                view.setDrawingCacheEnabled(true);
+                Bitmap screenshot = view.getDrawingCache();
+
+                String path = Environment.getExternalStorageDirectory().toString() + "/Lets_Chess_" + now + ".jpg";
+                File screenFile = new File(path);
+
+                FileOutputStream outputStream = new FileOutputStream(screenFile);
+                screenshot.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
+                outputStream.flush();
+                outputStream.close();
+                view.setDrawingCacheEnabled(false);
+
+                // making the screenshot show-up in gallery
+                ContentValues valuesForGallery = new ContentValues();
+                valuesForGallery.put(MediaStore.Images.Media.DATE_TAKEN, System.currentTimeMillis());
+                valuesForGallery.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
+                valuesForGallery.put(MediaStore.MediaColumns.DATA, path);
+                this.getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, valuesForGallery);
+
+
+            } catch (Throwable e) {
+                e.printStackTrace();
+            }
+
+            // restore layout
+            fragmentFrame.bringToFront();
+            fragmentFrame.setVisibility(View.VISIBLE);
+            menuButton.setVisibility(View.VISIBLE);
+            brandingImage.setVisibility(View.INVISIBLE);
+
+            GameManagement.makeToast(R.string.toast_board_sharing, Const.BLACK, this);
+        }
     }
 
     @Override
@@ -259,16 +323,7 @@ public class GameActivity extends AppCompatActivity implements GameManagement {
                 pads.get(color).setBackground(R.drawable.draw_icon_accepted);
                 pads.get(GameManagement.switchColor(color)).setBackground(R.drawable.draw_icon_ready);
 
-                Toast toast = new Toast(getApplicationContext());
-                toast.setDuration(Toast.LENGTH_LONG);
-                View toastLayout = getLayoutInflater().inflate(R.layout.toast_draw, findViewById(R.id.toast_layout));
-                int pxY = (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 25, getResources().getDisplayMetrics());
-                if(color == Const.WHITE){
-                    toastLayout.setRotation(180);
-                    toast.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL, 0, pxY);
-                } else toast.setGravity(Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, pxY);
-                toast.setView(toastLayout);
-                toast.show();
+                GameManagement.makeToast(R.string.draw_toast_text, color, this);
 
                 break;
             case Const.WHITE:
