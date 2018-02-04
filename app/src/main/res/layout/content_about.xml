@@ -22,27 +22,32 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/about_icons_begin"/>
+            android:text="@string/about_icons_begin"
+            android:textSize="12sp"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/about_FlatIcon"/>
+            android:text="@string/about_FlatIcon"
+            android:textSize="12sp"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/about_icons_and"/>
+            android:text="@string/about_icons_and"
+            android:textSize="12sp"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/about_FreePik"/>
+            android:text="@string/about_FreePik"
+            android:textSize="12sp"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/about_flaticon_link"/>
+            android:text="@string/about_flaticon_link"
+            android:textSize="12sp"/>
 
     </LinearLayout>
 

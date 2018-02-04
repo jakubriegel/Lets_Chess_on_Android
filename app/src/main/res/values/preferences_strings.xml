@@ -9,4 +9,6 @@
     </string-array>
 
     <string name="timer_on_key">display_timer</string>
+
+    <string name="vibrations_on_key">vibrate</string>
 </resources>

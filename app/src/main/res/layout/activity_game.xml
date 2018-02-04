@@ -56,9 +56,7 @@
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:background="@drawable/black_tile"
-        />
+        android:layout_centerVertical="true" />
 
     <Button
         android:id="@+id/game_menu_button"

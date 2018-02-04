@@ -4,8 +4,8 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
 import android.view.MotionEvent;
-import android.view.View;
 
 
 public class Board extends BoardView {
@@ -20,13 +20,15 @@ public class Board extends BoardView {
     public boolean onTouchEvent(MotionEvent event) {
         return super.onTouchEvent(event);
     }
-
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 
-        View parent = (View) this.getParent();
-        setMeasuredDimension((int) (parent.getWidth() * .95), (int) (parent.getWidth() * .95));
+        DisplayMetrics metrics = this.getResources().getDisplayMetrics();
+        int width = metrics.widthPixels;
+        setMeasuredDimension((int) (width * .95), (int) (width * .95));
+
+
     }
 
     @Override

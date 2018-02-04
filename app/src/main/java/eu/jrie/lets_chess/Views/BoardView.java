@@ -29,7 +29,7 @@ abstract class BoardView extends View {
     private List<Position> attackPointersToDraw;
 
     int displayMode;
-    private int oneTileWidth;
+    int oneTileWidth;
     private int maxY;
     private int maxX;
 

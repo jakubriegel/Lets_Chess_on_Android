@@ -26,6 +26,9 @@ interface GameManagement {
     void manageDraw(final byte color);
     void proceedFailure(final byte color);
 
+    void vibrate(final int time);
+    void vibratePattern(final long[] pattern, final int select);
+
     static byte switchColor(final byte c){
         if(c == Const.WHITE) return Const.BLACK;
         return Const.WHITE;
@@ -34,7 +37,7 @@ interface GameManagement {
     static void makeToast(final int stringId, final int color, Activity activity){
         Toast toast = new Toast(activity.getApplicationContext());
         toast.setDuration(Toast.LENGTH_LONG);
-        View toastLayout = activity.getLayoutInflater().inflate(R.layout.toast_draw, activity.findViewById(R.id.toast_layout));
+        View toastLayout = activity.getLayoutInflater().inflate(R.layout.toast, activity.findViewById(R.id.toast_layout));
         TextView toastText = toastLayout.findViewById(R.id.toast_text);
         toastText.setText(activity.getResources().getText(stringId));
         int pxY = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 25, activity.getResources().getDisplayMetrics());

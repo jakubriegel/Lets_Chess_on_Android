@@ -19,6 +19,7 @@
     <string name="preference_display_dialog">choose display mode</string>
     <string name="preference_timer_group">timer</string>
     <string name="preference_timer_title">count time</string>
+    <string name="preference_vibrations_title">vibrate</string>
     <string name="preference_time_begin">time at the beginning</string>
     <string name="preference_time_added">time added after each move</string>
 
@@ -26,7 +27,7 @@
 
     <!--about-->
     <string name="about_header">about</string>
-    <string name="about_app">This app is designed by Jakub Riegel. Discover more on jrie.eu.</string>
+    <string name="about_app">This app is designed by Jakub Riegel. \nDiscover more on jrie.eu.</string>
     <string name="about_icons_begin">Icons made by:\u0020</string>
     <string name="about_FlatIcon">Flat Icon</string>
     <string name="about_icons_and">\u0020and\u0020</string>
@@ -55,6 +56,9 @@
     <!--game menu-->
     <string name="game_menu_end_button">end game</string>
     <string name="game_menu_continue_button">continue</string>
+
+    <!--check-->
+    <string name="toast_check">check!</string>
 
     <!--draw-->
     <string name="draw_toast_text">your opponent offers draw</string>

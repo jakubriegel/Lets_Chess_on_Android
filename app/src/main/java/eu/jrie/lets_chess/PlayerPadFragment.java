@@ -20,17 +20,19 @@ public class PlayerPadFragment extends Fragment {
 
     private byte color;
     private Button drawButton;
+    private Button surrenderButton;
 
     private FrameLayout fragmentFrame;
     private SurrenderFragment surrenderFragment;
 
-    int timeToEnd;
-    int timeToAdd;
-    int timeToEndConst;
-    int timeToAddConst;
+    private int timeToEnd;
+    private int timeToAdd;
+    private int timeToEndConst;
+    private int timeToAddConst;
     private TextView timerView;
     private CountDownTimer timer;
     private boolean measureTime;
+    private boolean vibrated;
 
     public PlayerPadFragment() {
         // Required empty public constructor
@@ -52,9 +54,10 @@ public class PlayerPadFragment extends Fragment {
         drawButton = view.findViewById(R.id.player_pad_draw_button);
         drawButton.setOnClickListener(v -> gameManagement.manageDraw(color));
 
-        Button surrenderButton = view.findViewById(R.id.player_pad_surrender_button);
+        surrenderButton = view.findViewById(R.id.player_pad_surrender_button);
         surrenderButton.setOnClickListener(v -> confirmSurrender());
 
+        vibrated = false;
         timerView = view.findViewById(R.id.player_pad_timer_view);
         timer = null;
         timeToEnd = 0;
@@ -81,8 +84,12 @@ public class PlayerPadFragment extends Fragment {
 
     }
 
-    public void setBackground(int id){
+    public void setDrawButtonBackground(int id){
         drawButton.setBackgroundResource(id);
+    }
+
+    private void setSurrButtonBackground(int id){
+        surrenderButton.setBackgroundResource(id);
     }
 
     private void confirmSurrender(){
@@ -94,11 +101,15 @@ public class PlayerPadFragment extends Fragment {
     public void surrender(boolean sur){
         getChildFragmentManager().beginTransaction().remove(surrenderFragment).commit();
         fragmentFrame.setVisibility(View.GONE);
-        if(sur) gameManagement.proceedFailure(color);
+        if(sur){
+            setSurrButtonBackground(R.drawable.surrender_icon_red);
+            gameManagement.proceedFailure(color);
+        }
     }
 
     public void reset(){
-        setBackground(R.drawable.draw_icon);
+        setDrawButtonBackground(R.drawable.draw_icon);
+        setSurrButtonBackground(R.drawable.surrender_icon);
         capturedPad.reset();
         timeToEnd = timeToEndConst;
         if(timeToEnd > 0){
@@ -107,8 +118,11 @@ public class PlayerPadFragment extends Fragment {
         }
     }
 
-    public void end(){
-        if(measureTime) timer.cancel();
+    public void end(final byte winner){
+        if(measureTime && timer != null) timer.cancel();
+
+        if(winner == color) setSurrButtonBackground(R.drawable.surrender_icon_green);
+        else setSurrButtonBackground(R.drawable.surrender_icon_red);
     }
 
     public void changeTurn(int activeColor){
@@ -125,6 +139,25 @@ public class PlayerPadFragment extends Fragment {
     }
 
     private void updateTimerView(){
+        if(timeToEnd <= 15000) {
+            if (vibrated) {
+                long[] pattern = {0, 50, 50, 50};
+                gameManagement.vibratePattern(pattern, -1);
+                vibrated = false;
+                timerView.setTextColor(getActivity().getResources().getColor(R.color.colorHighlightRed));
+            }
+        }
+        else if(timeToEnd <= 30000){
+            if(!vibrated) {
+                gameManagement.vibrate(50);
+                vibrated = true;
+                timerView.setTextColor(getActivity().getResources().getColor(R.color.colorHighlightOrange));
+            }
+        }
+        else{
+            vibrated = false;
+            timerView.setTextColor(getActivity().getResources().getColor(R.color.colorPrimaryGold));
+        }
         int min = timeToEnd / 60000;
         int sec = (timeToEnd % 60000) / 1000;
         String time = min + ":";
@@ -135,20 +168,22 @@ public class PlayerPadFragment extends Fragment {
     }
 
     void startTimer(){
-        timer = new CountDownTimer(timeToEnd, 1000){
-            @Override
-            public void onTick(long l) {
-                timeToEnd -= 1000;
-                updateTimerView();
-            }
+        if(measureTime) {
+            timer = new CountDownTimer(timeToEnd, 1000) {
+                @Override
+                public void onTick(long l) {
+                    timeToEnd -= 1000;
+                    updateTimerView();
+                }
 
-            @Override
-            public void onFinish() {
-                timeToEnd = 0;
-                updateTimerView();
-                gameManagement.proceedFailure(color);
-            }
-        }.start();
+                @Override
+                public void onFinish() {
+                    timeToEnd = 0;
+                    updateTimerView();
+                    gameManagement.proceedFailure(color);
+                }
+            }.start();
+        }
     }
 
     void stopTimer(){

@@ -7,6 +7,7 @@ import android.graphics.Paint;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
 import android.view.View;
 
 import eu.jrie.lets_chess.R;
@@ -28,8 +29,9 @@ public class BoardGrid extends View {
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 
-        View parent = (View) this.getParent();
-        setMeasuredDimension((int) (parent.getWidth() * .95), (int) (parent.getWidth() * .95));
+        DisplayMetrics metrics = this.getResources().getDisplayMetrics();
+        int width = metrics.widthPixels;
+        setMeasuredDimension((int) (width * .95), (int) (width * .95));
     }
 
     @SuppressLint("ResourceAsColor")

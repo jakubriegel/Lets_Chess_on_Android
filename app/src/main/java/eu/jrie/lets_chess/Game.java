@@ -3,7 +3,6 @@ package eu.jrie.lets_chess;
 import android.content.Context;
 import android.util.Log;
 import android.view.MotionEvent;
-import android.widget.LinearLayout;
 
 import eu.jrie.lets_chess.Pieces.Bishop;
 import eu.jrie.lets_chess.Pieces.King;
@@ -26,11 +25,9 @@ class Game {
     private Piece activePiece;
     byte activeColor;
     List<Piece> pieces;
-    private List<Piece> capturedPieces;
+    private List<Piece> capturedPieces; // added for future extensions
     private Piece whiteKing, blackKing;
     private List<Piece> enPassantInPast;
-
-    byte winner;
 
     private final Context context;
     private final GameActivity gameActivity;
@@ -71,8 +68,7 @@ class Game {
 
     void end(byte w){
         state = Const.STATE_END;
-        winner = w;
-        gameActivity.endOfTheGame(winner);
+        gameActivity.endOfTheGame(w);
     }
 
     private void changeTurn(){
@@ -96,14 +92,16 @@ class Game {
             king = whiteKing;
         }
 
-        if(isSquareAttacked(king.position, king)){
-            if(!mayCheckBeAvoided(king)) {
-                if (activeColor == Const.WHITE) end(Const.BLACK);
-                else end(Const.WHITE);
-            }
-        }
-
         gameActivity.changeTurn(activeColor);
+
+        if(!mayCheckBeAvoided(king)) {
+            if (activeColor == Const.WHITE) end(Const.BLACK);
+            else end(Const.WHITE);
+        }
+        else if(isSquareAttacked(king.position, king)){
+            gameActivity.vibrate(200);
+            GameManagement.makeToast(R.string.toast_check, GameManagement.switchColor(activeColor), gameActivity);
+        }
     }
 
     void processTouch(MotionEvent event, Position touchPosition){
@@ -159,9 +157,9 @@ class Game {
                                 if(pieceOnSquare(touchPosition)) capture(getPieceOn(touchPosition));
 
                                 activePiece.moveTo(touchPosition);
-                                if(activePiece instanceof Pawn){ // check openPromotionFragment possibility
-                                    if(activePiece.color == Const.WHITE && activePiece.position.y == 7)
-                                        promotion(activePiece);
+                                if(activePiece instanceof Pawn){ // check promotion possibility
+                                    if(activePiece.color == Const.WHITE
+                                            && activePiece.position.y == 7) promotion(activePiece);
                                     else if(activePiece.position.y == 0) promotion(activePiece);
                                 }
                                 changeTurn();
@@ -326,22 +324,19 @@ class Game {
     }
 
     private boolean mayCheckBeAvoided(Piece king){
-        if(isSquareAttacked(king.position, king)){
-            List<Piece> tempPieces = new ArrayList<>(pieces);
-            for(Piece i : tempPieces) { // must be like this, see README.md -> code tricks
-                if (i.color == king.color) {
-                    if (i instanceof King) {
-                        if (!removeAttacked(getMovePointers(i), i).isEmpty()) return true;
-                        if (!removeAttacked(getAttackPointers(i), i).isEmpty()) return true;
-                    } else {
-                        if (!makeKingSafe(i, getMovePointers(i)).isEmpty()) return true;
-                        if (!makeKingSafe(i, getAttackPointers(i)).isEmpty()) return true;
-                    }
+        List<Piece> tempPieces = new ArrayList<>(pieces);
+        for(Piece i : tempPieces) { // needs to be like this, see README.md -> code tricks
+            if (i.color == king.color) {
+                if (i instanceof King) {
+                    if (!removeAttacked(getMovePointers(i), i).isEmpty()) return true;
+                    if (!removeAttacked(getAttackPointers(i), i).isEmpty()) return true;
+                } else {
+                    if (!makeKingSafe(i, getMovePointers(i)).isEmpty()) return true;
+                    if (!makeKingSafe(i, getAttackPointers(i)).isEmpty()) return true;
                 }
             }
-            return false;
         }
-        return true;
+        return false;
     }
 
     private List<Position> makeKingSafe(Piece movingPiece, List<Position> squares){
@@ -359,13 +354,11 @@ class Game {
         }
         Position protectedPiecePosition = protectedPiece.position;
         protectedPiece.position = square;
-        Log.v(Const.DEBUG_TAG, square.x + " " + square.y);
         for(Piece i : pieces) if(i.color != protectedPiece.color) {
             for (Position attackedSquare : getAttackPointers(i))
                 if (Position.areEqual(square, attackedSquare)) {
                     if (capturedPiece != null) pieces.add(capturedPiece);
                     protectedPiece.position = protectedPiecePosition;
-                    Log.v(Const.DEBUG_TAG, i.getClass().toString() + " " + i.color);
                     return true;
                 }
         }
@@ -376,7 +369,6 @@ class Game {
 
     // deleting attacked squares from kings moves
     private List<Position> removeAttacked(List<Position> squares, Piece protectedPiece){
-        Log.v(Const.DEBUG_TAG, "KING");
         ListIterator<Position> squaresIterator = squares.listIterator();
         Position tempSquare;
         while(squaresIterator.hasNext()) {

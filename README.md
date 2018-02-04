@@ -24,7 +24,7 @@ Players can choose between two pieces style *classic* and *modern*.
 
 
 
-Game can end at any time with a draw or surrending by one player. Each player has two buttons, one dedicated to offer a draw, second to surrender. When draw button is clicked by one player, second gets notified about it and if he presses his button, game ends with a draw. Of course draw offer can be withdrawn any time before being confirmed. After clicking surrender button player is asked to confirm surrending. If he does so, game ends with victory of second player. 
+Game can end at any time with a draw or surrendering by one player. Each player has two buttons, one dedicated to offer a draw, second to surrender. When draw button is clicked by one player, second gets notified about it and if he presses his button, game ends with a draw. Of course draw offer can be withdrawn any time before being confirmed. After clicking surrender button player is asked to confirm surrendering. If he does so, game ends with victory of second player.
 <br><img src="./docs/screenshots/draw_offer.png" width="300dp" /> <img src="./docs/screenshots/surreder.png" width="300dp" />
 
 

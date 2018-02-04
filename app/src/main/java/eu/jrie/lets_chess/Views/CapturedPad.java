@@ -3,10 +3,11 @@ package eu.jrie.lets_chess.Views;
 import android.content.Context;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.widget.LinearLayout;
+
 import eu.jrie.lets_chess.Const;
 import eu.jrie.lets_chess.Pieces.Piece;
 import eu.jrie.lets_chess.Position;
-
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -28,6 +29,10 @@ public class CapturedPad extends BoardView {
         updatePiecesToDraw();
 
         invalidate();
+
+        // centering drawing area
+        this.setLayoutParams(new LinearLayout.LayoutParams(
+                9 * oneTileWidth, 2 * oneTileWidth));
     }
 
     private void updatePiecesToDraw(){

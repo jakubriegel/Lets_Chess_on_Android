@@ -11,6 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="80dp"
         android:layout_marginTop="5dp"
+        android:gravity="center"
         android:background="@drawable/player_pad_background">
 
             <eu.jrie.lets_chess.Views.CapturedPad

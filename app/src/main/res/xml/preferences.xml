@@ -16,5 +16,11 @@
         android:summary=""
         android:defaultValue="false" />
 
+    <SwitchPreference
+        android:key="@string/vibrations_on_key"
+        android:title="@string/preference_vibrations_title"
+        android:summary=""
+        android:defaultValue="true" />
+
 
 </PreferenceScreen>

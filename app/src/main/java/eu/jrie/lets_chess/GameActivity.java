@@ -3,10 +3,12 @@ package eu.jrie.lets_chess;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.Environment;
+import android.os.Vibrator;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
@@ -17,6 +19,7 @@ import android.util.DisplayMetrics;
 import android.util.SparseArray;
 import android.util.TypedValue;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -42,7 +45,8 @@ public class GameActivity extends AppCompatActivity implements GameManagement {
     private Button menuButton;
     private ImageView brandingImage;
 
-    private int displayMode;
+    private byte displayMode;
+    private boolean vibrations;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +56,7 @@ public class GameActivity extends AppCompatActivity implements GameManagement {
         menuButton = findViewById(R.id.game_menu_button);
         brandingImage = findViewById(R.id.branding_image);
         brandingImage.setVisibility(View.INVISIBLE);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         // preparing spot for fragments
         fragmentFrame = findViewById(R.id.game_fragment_frame);
@@ -64,7 +69,8 @@ public class GameActivity extends AppCompatActivity implements GameManagement {
         if(Objects.equals(displayStr, "")) displayMode = Const.CLASSIC_MODE; // default preferences don't work on some devices
         else if (Objects.equals(displayStr, getResources().getString(R.string.classic_mode))) displayMode = Const.CLASSIC_MODE;
         else  displayMode = Const.MODERN_MODE;
-        boolean timerOn =preferences.getBoolean(getResources().getString(R.string.timer_on_key), false);
+        boolean timerOn = preferences.getBoolean(getResources().getString(R.string.timer_on_key), false);
+        vibrations = preferences.getBoolean(getResources().getString(R.string.vibrations_on_key), false);
 
         // setting up timers
         int beginningTime = 0;
@@ -86,9 +92,11 @@ public class GameActivity extends AppCompatActivity implements GameManagement {
         pads.get(Const.BLACK).changeTurn(activeColor);
     }
 
-    public void endOfTheGame(byte winner){
-        pads.get(Const.WHITE).end();
-        pads.get(Const.BLACK).end();
+    public void endOfTheGame(final byte winner){
+        long[] pattern = {50, 200, 300, 200, 300, 800};
+        vibratePattern(pattern,-1);
+        pads.get(Const.WHITE).end(winner);
+        pads.get(Const.BLACK).end(winner);
         gameEndFragment = new GameEndFragment();
         Bundle winnerCode = new Bundle();
         winnerCode.putByte("winner", winner);
@@ -320,8 +328,8 @@ public class GameActivity extends AppCompatActivity implements GameManagement {
         switch (drawState){
             case Const.NO_DRAW:
                 drawState = color;
-                pads.get(color).setBackground(R.drawable.draw_icon_accepted);
-                pads.get(GameManagement.switchColor(color)).setBackground(R.drawable.draw_icon_ready);
+                pads.get(color).setDrawButtonBackground(R.drawable.draw_icon_accepted);
+                pads.get(GameManagement.switchColor(color)).setDrawButtonBackground(R.drawable.draw_icon_ready);
 
                 GameManagement.makeToast(R.string.draw_toast_text, color, this);
 
@@ -330,11 +338,11 @@ public class GameActivity extends AppCompatActivity implements GameManagement {
             case Const.BLACK:
                 if(color == drawState){
                     drawState = Const.NO_DRAW;
-                    pads.get(Const.WHITE).setBackground(R.drawable.draw_icon);
-                    pads.get(Const.BLACK).setBackground(R.drawable.draw_icon);
+                    pads.get(Const.WHITE).setDrawButtonBackground(R.drawable.draw_icon);
+                    pads.get(Const.BLACK).setDrawButtonBackground(R.drawable.draw_icon);
                 }
                 else{
-                    pads.get(color).setBackground(R.drawable.draw_icon_accepted);
+                    pads.get(color).setDrawButtonBackground(R.drawable.draw_icon_accepted);
                     game.end(Const.DRAW);
                 }
                 break;
@@ -344,5 +352,21 @@ public class GameActivity extends AppCompatActivity implements GameManagement {
     @Override
     public void proceedFailure(byte color) {
         game.end(GameManagement.switchColor(color));
+    }
+
+    @Override
+    public void vibrate(int time) {
+        if(vibrations) {
+            Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+            if (v != null) v.vibrate(time);
+        }
+    }
+
+    @Override
+    public void vibratePattern(long[] pattern, int select) {
+        if(vibrations) {
+            Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+            if (v != null) v.vibrate(pattern, select);
+        }
     }
 }
