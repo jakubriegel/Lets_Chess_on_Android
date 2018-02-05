@@ -75,4 +75,5 @@
 
     <!--board sharing-->
     <string name="toast_board_sharing">board image saved to the gallery</string>
+    <string name="toast_board_sharing_failed">try again</string>
 </resources>

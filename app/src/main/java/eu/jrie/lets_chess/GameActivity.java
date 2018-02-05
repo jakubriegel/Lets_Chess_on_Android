@@ -274,9 +274,11 @@ public class GameActivity extends AppCompatActivity implements GameManagement {
 
         int permission = ActivityCompat.checkSelfPermission(
                 this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
-        if (permission != PackageManager.PERMISSION_GRANTED)
+        if (permission != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(
                     this, PERMISSIONS_STORAGE, REQUEST_EXTERNAL_STORAGE);
+            GameManagement.makeToast(R.string.toast_board_sharing_failed, Const.BLACK, this);
+        }
         else{
             // prepare layout
             fragmentFrame.setVisibility(View.GONE);
